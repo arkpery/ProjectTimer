@@ -14,16 +14,19 @@ La description du projet est disponible ici >[Project](Project.md)
 
 # Prérequis
 Pour pouvoir compiler et lancer le serveur depuis les sources les logiciels suivants sont nécessaire :
-
-- A venir ...
+- Docker
+- docker-compose
 
 # Installation & Utilisation
-A venir ...
+- docker-compose up --build
 
 # Technologies
 
 Voici les principales technologies et framework utilisé dans le projet :
-- A venir ...
+- Node.js
+- Express
+- MongoDB
+
 
 # Documenation
 
