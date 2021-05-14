@@ -26,6 +26,7 @@ Voici les principales technologies et framework utilisé dans le projet :
 - Node.js
 - Express
 - MongoDB
+- Docker
 
 
 # Documenation
