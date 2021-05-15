@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  node:
+    container_name: project_node
+    image: 'node:latest'
+    working_dir: /home/node/app
+    env_file:
+      - .env
+    command:
+      - /bin/sh
+      - '-c'
+      - 'npm install && npm start'
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - './src:/home/node/app'
+    links:
+      - mongo
+
+  mongo:
+    container_name: project_mongo
+    image: mongo
+    ports:
+      - "27017:27017"

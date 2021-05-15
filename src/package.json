@@ -1,0 +1,32 @@
+{
+  "name": "projecttimer-back-end",
+  "version": "1.0.0",
+  "description": "Serveur de l'application :notebook_with_decorative_cover: Project Timer, dans le cadre du projet sur le module d'**Algorithmie et Javascript avancé** de l'année 2021-2022 du **« Mastère  Développeur Front Servicenow »  - titre Chef(fe) de projets Informatique** à l'école : **La Passerelle des Métiers du Numérique**.",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arkpery/ProjectTimer-back-end.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arkpery/ProjectTimer-back-end/issues"
+  },
+  "homepage": "https://github.com/arkpery/ProjectTimer-back-end#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "express-swagger-generator": "^1.1.17",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.9"
+  }
+}
