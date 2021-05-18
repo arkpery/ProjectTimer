@@ -1,8 +1,9 @@
+
 const timers = require("../../controllers/timerController.js");
 const Context = require("../../services/context");
 const { router, id } = Context.Pull();
 
-// Create a new Timers
+// Create a new Timer
 router.post('/timers', timers.create);
 
 // Retrieve all Timers
