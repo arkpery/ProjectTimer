@@ -11,9 +11,9 @@ const TimerSchema = mongoose.Schema({
         type: String
     },
 
-    taskType: {
-        type: String
-    },
+    // taskType: {
+    //     type: String
+    // },
 
     // user: {
 

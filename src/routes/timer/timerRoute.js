@@ -17,4 +17,5 @@ router.put('/timers/:timerId', timers.update);
 
 // Delete a Timer with timerId
 router.delete('/timers/:timerId', timers.delete);
+
 module.exports = router;
