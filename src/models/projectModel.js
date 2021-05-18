@@ -21,11 +21,13 @@ const ProjectSchema = mongoose.Schema({
     // },
 
     close: {
-        type: Boolean
+        type: Boolean,
+        default: false,
     },
 
     public: {
-        type: Boolean
+        type: Boolean,
+        default: false,
     },
     created_at: {
         type: Date,
