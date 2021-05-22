@@ -72,18 +72,18 @@ exports.delete = async (req, res) => {
 
     try {
         const group = await Group.findById(id).populate({
-            path: "admin",
-            populate: {
-                path: "groups"
-            }
+            path: "admin"
         });
 
         if (!group){
             res.status(404).json({
-                err: "user not found"
+                err: "group not found"
             });
             return;
         }
+        const user = await User.findById(group.admin.id).populate("groups");
+        user.groups = user.groups.filter(group => group._id != id);
+        await user.save();
         const status = await group.delete()
         res.json({
             message: "OK"
