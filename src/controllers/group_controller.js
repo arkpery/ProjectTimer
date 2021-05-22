@@ -1,6 +1,5 @@
-const controller = require("./base_controller");
-const Group = require("../models/group_model");
-const User = require("../models/user_model");
+const Group = require("../models/group_model").Model;
+const User = require("../models/user_model").Model;
 
 exports.list = async (req, res) => {
     const perPage = req.query.perPage ?? 10;
@@ -8,7 +7,10 @@ exports.list = async (req, res) => {
     const firstIndex = perPage * (numPage - 1);
 
     try {
-        const list = await Group.find().skip(firstIndex).size(perPage);
+        const list = await Group.find({}, null, {
+            skip: firstIndex,
+            limit: perPage
+        }).populate("admin");
 
         res.json(list);
     }
@@ -23,11 +25,16 @@ exports.read = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const group = await Group.findById(id);
+        const group = await Group.findById(id).populate({
+            path: "admin",
+            populate: {
+                path: "groups"
+            }
+        });
 
-        if (!user){
+        if (!group){
             res.status(404).json({
-                err: "user not found"
+                message: "NOT FOUND"
             });
             return;
         }
@@ -45,16 +52,13 @@ exports.insert = async (req, res) => {
     const group = new Group(body);
 
     try {
-        if (group.admin){
-            const id = group.admin.id;
+        const saved = await group.save();
+        const admin = saved.admin;
+        const user = await User.findById(admin);
 
-            const user = await User.findById(id);
-            group.admin = user;
-        }
-        const status = await group.save();
-
-
-        res.json(status);
+        user.groups.push(saved);
+        await user.save();
+        res.json(saved);
     }
     catch (e){
         res.status(400).json({
@@ -63,15 +67,27 @@ exports.insert = async (req, res) => {
     }
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const status = await Group.deleteOne({
-            id
+        const group = await Group.findById(id).populate({
+            path: "admin",
+            populate: {
+                path: "groups"
+            }
         });
 
-        res.json(status);
+        if (!group){
+            res.status(404).json({
+                err: "user not found"
+            });
+            return;
+        }
+        const status = await group.delete()
+        res.json({
+            message: "OK"
+        });
     }
     catch (e){
         res.status(400).json({
@@ -80,20 +96,16 @@ exports.delete = (req, res) => {
     }
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const body = req.body;
     const group = new Group(body);
 
     try {
-        if (group.admin){
-            const id = group.admin.id;
+        const updated = await Group.findByIdAndUpdate(req.body._id, group);
 
-            const user = await User.findById(id);
-            group.admin = user;
-        }
-        const status = await group.save();
-
-        res.json(status);
+        res.json({
+            message: "OK"
+        });
     }
     catch (e){
         res.status(400).json({
