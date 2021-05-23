@@ -6,6 +6,6 @@ router.get("/group", groupController.list);
 router.get("/group/:id", groupController.read);
 router.post("/group", groupController.insert);
 router.delete("/group/:id", groupController.delete);
-router.put("/group", groupController.update);
+router.put("/group/:id", groupController.update);
 
 module.exports = router;

@@ -86,6 +86,10 @@ exports.insert = async (req, res) => {
 
         await user.save();
         res.json({
+            data: {
+                "_id": user.id,
+                "email": user.email
+            },
             message: "OK"
         });
     } catch (e) {
@@ -133,17 +137,19 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
     const views = req.body;
+    const id = req.params.id;
     if (!views.groups) {
         views.groups = [];
     }
     const groups = views.groups.slice();
     views.groups = [];
     const data_user = views;
+    data_user._id =  id;
     const user = new User(data_user);
 
     try {
-        const userdb = await User.findById(user._id);
-        const updated = await User.findByIdAndUpdate(userdb._id, user);
+        const userdb = await User.findById(id);
+        const updated = await User.findByIdAndUpdate(id, user);
 
         for (let grp of groups) {
             if (grp._id) {

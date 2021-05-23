@@ -58,7 +58,13 @@ exports.insert = async (req, res) => {
 
         user.groups.push(saved);
         await user.save();
-        res.json(saved);
+        res.json({
+            message: "OK",
+            data: {
+                "_id": saved._id,
+                "name": saved.name
+            }
+        });
     }
     catch (e){
         res.status(400).json({
@@ -98,10 +104,11 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
     const body = req.body;
+    const id = req.params.id;
     const group = new Group(body);
 
     try {
-        const updated = await Group.findByIdAndUpdate(req.body._id, group);
+        const updated = await Group.findByIdAndUpdate(id, group);
 
         res.json({
             message: "OK"
