@@ -11,12 +11,6 @@ app.use(cors());
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://mongo/apinode');
 
-/**
- * Routes in the "routes" in the routes 
- * directory will be autoloaded, 
- * you have an example on how to create routes 
- * in the routes/hello/hello_route.js file
- */
 autoloading(app);
 
 app.listen(process.env.PORT, process.env.HOSTNAME, () => {
