@@ -30,16 +30,15 @@ const userSchema = mongoose.Schema({
     },
     created_at: {
         type: Date,
-        default: Date.now
     },
     updated_at: {
         type: Date,
-        default: Date.now
     }
-});
-
-userSchema.pre(["update", "save", "updateOne", "findByIdAndUpdate"], () => {
-    this.updated_at = Date.now();
+}, { 
+    timestamps: { 
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    } 
 });
 
 const model = mongoose.model("User", userSchema);

@@ -12,17 +12,17 @@ const groupSchema = mongoose.Schema({
     },
     created_at: {
         type: Date,
-        default: Date.now
     },
     updated_at: {
         type: Date,
-        default: Date.now
     }
+}, {
+    timestamps: { 
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    } 
 });
 
-groupSchema.pre(["update", "save", "updateOne", "findByIdAndUpdate"], () => {
-    this.updated_at = Date.now();
-});
 
 const model = mongoose.model("Group", groupSchema)
 

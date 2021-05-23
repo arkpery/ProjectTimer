@@ -105,6 +105,7 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
     const body = req.body;
     const id = req.params.id;
+    body._id = id;
     const group = new Group(body);
 
     try {
