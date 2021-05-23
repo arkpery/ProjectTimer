@@ -13,7 +13,12 @@ exports.list = async (req, res) => {
         }, {
             skip: firstIndex,
             limit: perPage
-        }).populate("groups");
+        }).populate([{
+            path: "groups",
+            populate: {
+                path: "admin"
+            }
+        }]);
 
         res.json(list);
     } catch (e) {
@@ -29,12 +34,17 @@ exports.read = async (req, res) => {
     try {
         const user = await User.findById(id, {
             password: 0
-        }).populate({
+        }).populate([{
             path: "groups",
             populate: {
                 path: "admin"
             }
-        });
+        }, {
+            path: "groups",
+            populate: {
+                path: "members"
+            }
+        }]);
 
         if (!user) {
             res.status(404).json({
@@ -61,12 +71,10 @@ exports.login = async (req, res) => {
 
         if (flag) {
             res.json({
-                message: "OK"
+                message: `Login sucessfull`
             });
         } else {
-            res.status(400).json({
-                err: "Error"
-            });
+            throw new Error(`Bad credentials`);
         }
     } catch (e) {
         res.status(400).json({
@@ -90,7 +98,7 @@ exports.insert = async (req, res) => {
                 "_id": user.id,
                 "email": user.email
             },
-            message: "OK"
+            message: `user ${user.email} inserted`
         });
     } catch (e) {
         res.status(400).json({
@@ -106,7 +114,7 @@ exports.delete = async (req, res) => {
         const user = await User.findById(id).populate({
             path: "groups",
             populate: {
-                path: "admin"
+                path: "admin",
             }
         });
         if (!user) {
@@ -120,14 +128,25 @@ exports.delete = async (req, res) => {
         }
         const groups = user.groups;
         for (let group of groups) {
-            if (group.admin._id === id) {
-                throw new Error("GROUP WITH THIS USER EXIST");
+            if (group.members.length) {
+                group.members = group.members.filter(member => member._id.toString() != id.toString());
+                await group.save();
             }
         }
-        await user.delete();
-        res.json({
-            message: "OK"
-        });
+        let flag = true;
+        for (let group of groups) {
+            if (group.admin._id.toString() === id.toString()) {
+                flag = false;
+            }
+        }
+        if (flag) {
+            await user.delete();
+            res.json({
+                message: `user ${user.name} deleted`
+            });
+        } else {
+            throw new Error(`the user ${user.name} can't be deleted`);
+        }
     } catch (e) {
         res.status(400).json({
             err: e.message
@@ -144,29 +163,66 @@ exports.update = async (req, res) => {
     const groups = views.groups.slice();
     views.groups = [];
     const data_user = views;
-    data_user._id =  id;
+    data_user._id = id;
     const user = new User(data_user);
 
     try {
         const userdb = await User.findById(id);
+        if (!userdb) {
+            res.status(404).json({
+                message: `user not found`
+            });
+            return;
+        }
         const updated = await User.findByIdAndUpdate(id, user);
+        updated.groups = groups;
+        await updated.save();
+        const list = await Group.find({
+            members: id
+        });
+        for (let i = 0; i < list.length; i++) {
+            const group = list[i];
+            let flag = false;
 
-        for (let grp of groups) {
-            if (grp._id) {
-                updated.groups.push(grp._id);
-            } else if (grp.name) {
-                const group = new Group({
-                    name: grp.name,
-                    admin: updated._id
-                });
+            for (let grp of updated.groups) {
+                if (grp.toString() == group._id.toString()) {
+                    flag = true;
+                }
+            }
+            if (group.admin.toString() == id.toString()) {
+                console.log("enter");
+            } else if (!flag) {
+                let f2 = true;
 
-                const saved_grp = await group.save();
-                updated.groups.push(saved_grp._id);
+                while (f2) {
+                    const index = group.members.findIndex(el => el.toString() == id.toString());
+
+                    if (index > -1) {
+                        group.members.splice(index, 1);
+                    } else {
+                        f2 = false;
+                    }
+                }
+                await group.save();
             }
         }
-        await updated.save();
+        for (let grpId of groups) {
+            const grp = await Group.findById(grpId);
+            const members = grp.members;
+            let flag = false;
+
+            for (let member of members) {
+                if (member.toString() == id.toString()) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                grp.members.push(id);
+            }
+            await grp.save();
+        }
         res.json({
-            message: "OK"
+            message: `user ${updated.email} updated`
         });
     } catch (e) {
         res.status(400).json({

@@ -10,6 +10,10 @@ const groupSchema = mongoose.Schema({
         type: ObjectId,
         ref: "User"
     },
+    members: [{
+        type: ObjectId,
+        ref: "User"
+    }],
     created_at: {
         type: Date,
     },
