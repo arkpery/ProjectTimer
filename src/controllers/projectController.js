@@ -1,19 +1,28 @@
+const mongoose = require('mongoose');
 const Project = require('../models/projectModel');
+const Group = require("../models/group_model").Model;
+//const Timer = require('../models/timerModel.js');
 
-// Create and Save a new Project
-exports.create = (req, res) => {
 
 
-    // // Validate request
+// Create new Project
+exports.createProject = (req, res) => {
+    // Validate request
     if (!req.body) {
         return res.status(400).send({
             message: "Project content can not be empty!"
         });
     }
 
+
     // Create a Project
-    let newProject = new Project(req.body);
-    newProject.id_post = req.params.id_post;
+    const newProject = new Project({
+        _id: mongoose.Types.ObjectId(),
+        name: req.body.name,
+        groups: req.body.groups,
+        admin: req.body.admin,
+        //timer: req.body.timerId
+    });
 
     // Save Project in the database
     newProject.save()
@@ -24,10 +33,14 @@ exports.create = (req, res) => {
                 message: err.message || "Some error occurred while creating the Project."
             });
         });
+
+
+
 };
 
+
 // Retrieve and return all projects from the database.
-exports.findAll = (req, res) => {
+exports.findAllProjects = (req, res) => {
 
     Project.find()
         .then(projects => {
@@ -40,8 +53,9 @@ exports.findAll = (req, res) => {
 
 };
 
-// Find a single project with a projectId
-exports.findOne = (req, res) => {
+
+// Get Project by Id
+exports.findOneProject = (req, res) => {
     Project.findById(req.params.projectId)
         .then(project => {
             if (!project) {
@@ -62,8 +76,13 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Update a project identified by the projectId in the request
-exports.update = (req, res) => {
+
+
+
+
+
+// Update Project by Id
+exports.updateProject = (req, res) => {
     // Validate Request
     if (!req.body) {
         return res.status(400).send({
@@ -95,8 +114,11 @@ exports.update = (req, res) => {
         });
 };
 
+
+
+
 // Delete a project with the specified projetId in the request
-exports.delete = (req, res) => {
+exports.deleteProject = (req, res) => {
     Project.findByIdAndRemove(req.params.projectId)
         .then(project => {
             if (!project) {
@@ -104,7 +126,7 @@ exports.delete = (req, res) => {
                     message: "Project not found with id " + req.params.projectId
                 });
             }
-            res.send({ message: "Project deleted successfully!" });
+            res.send({ message: "Project DELETED successfully!" });
         }).catch(err => {
             if (err.kind === 'ObjectId' || err.name === 'NotFound') {
                 return res.status(404).send({
@@ -116,3 +138,9 @@ exports.delete = (req, res) => {
             });
         });
 };
+
+
+
+
+
+

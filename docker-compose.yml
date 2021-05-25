@@ -9,7 +9,7 @@ services:
     command:
       - /bin/sh
       - "-c"
-      - "npm install && npm start"
+      - "npm install && npm run ${ENV}"
     ports:
       - "${PORT}:${PORT}"
     volumes:
