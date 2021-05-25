@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const Project = require('../models/projectModel');
 const Group = require("../models/group_model").Model;
-//const Timer = require('../models/timerModel.js');
-
+const Timer = require('../models/timerModel.js');
 
 
 // Create new Project
@@ -13,15 +12,13 @@ exports.createProject = (req, res) => {
             message: "Project content can not be empty!"
         });
     }
-
-
     // Create a Project
     const newProject = new Project({
         _id: mongoose.Types.ObjectId(),
         name: req.body.name,
         groups: req.body.groups,
         admin: req.body.admin,
-        //timer: req.body.timerId
+        timer: req.body.timerId
     });
 
     // Save Project in the database
@@ -38,7 +35,6 @@ exports.createProject = (req, res) => {
 
 };
 
-
 // Retrieve and return all projects from the database.
 exports.findAllProjects = (req, res) => {
 
@@ -52,7 +48,6 @@ exports.findAllProjects = (req, res) => {
         });
 
 };
-
 
 // Get Project by Id
 exports.findOneProject = (req, res) => {
@@ -75,10 +70,6 @@ exports.findOneProject = (req, res) => {
             });
         });
 };
-
-
-
-
 
 
 // Update Project by Id
@@ -113,8 +104,6 @@ exports.updateProject = (req, res) => {
             });
         });
 };
-
-
 
 
 // Delete a project with the specified projetId in the request
