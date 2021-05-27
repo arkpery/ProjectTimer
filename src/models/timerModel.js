@@ -28,21 +28,47 @@ const TimerSchema = mongoose.Schema({
         default: Date.now
     },
 
-    project: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project',
-        required: true
-    },
+    // project: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Project',
+    //     required: true
+    // },
+
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
     created_at: {
         type: Date,
-        default: Date.now
+        default: new Date()
     },
     updated_at: {
         type: Date,
         default: Date.now
-    }
+    },
+    logs: [{
+        seconds: Number,
+        endDate: { type: Date, default: new Date() }
+    }]
+
 }
 );
+
+TimerSchema.virtual('totalTimeInSeconds').get(function () {
+    return this.logs.reduce(function (totalTimeInSeconds, log) {
+        return totalTimeInSeconds + log.seconds;
+    }, 0);
+});
+
+TimerSchema.methods.apiRepr = function () {
+    return {
+        _id: this._id,
+        description: this.description,
+        taskType: this.taskType,
+        created_at: this.created_at,
+        projectNotes: this.projectNotes,
+        totalTimeInSeconds: this.totalTimeInSeconds,
+        isRunning: false,
+        currentEntryCount: 0
+    };
+}
 
 module.exports = mongoose.model('Timer', TimerSchema);
