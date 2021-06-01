@@ -4,16 +4,23 @@ const ObjectId = mongoose.SchemaTypes.ObjectId;
 const groupSchema = mongoose.Schema({
     name: {
         type: String,
-        unique: true
+        unique: true,
+        required: [true, 'Groupe name is required'],
+        match: /[a-z]/,
+        minlength: [3, 'Group name too long !'],
     },
     admin: {
         type: ObjectId,
-        ref: "User"
+        ref: 'User',
+        require: "Admin is required"
     },
     members: [{
         type: ObjectId,
-        ref: "User"
+        ref: 'User',
+        require: "Members is required"
     }],
+
+
     created_at: {
         type: Date,
     },
@@ -21,10 +28,10 @@ const groupSchema = mongoose.Schema({
         type: Date,
     }
 }, {
-    timestamps: { 
+    timestamps: {
         createdAt: 'created_at',
         updatedAt: 'updated_at'
-    } 
+    }
 });
 
 
