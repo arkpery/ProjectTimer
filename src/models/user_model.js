@@ -7,14 +7,17 @@ const userSchema = mongoose.Schema({
     email: {
         unique: true,
         required: true,
-        type: String
-    },
-    firstname: {
-        type: String
+        type: String,
+        match: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
     },
     password: {
         type: String,
-        required: true
+        min: (8, 'Too short, min is 5 characters'),
+        max: (32, 'Too long, max is 32 characters'),
+        required: 'Password is required'
+    },
+    firstname: {
+        type: String
     },
     lastname: {
         type: String
@@ -22,23 +25,25 @@ const userSchema = mongoose.Schema({
     birthdate: {
         type: Date
     },
-    groups: [{
-        type: Schema.Types.ObjectId, ref: "Group"
-    }],
+
     avatar: {
         type: String
     },
+    groups: [{
+        type: Schema.Types.ObjectId, ref: "Group"
+    }],
+
     created_at: {
         type: Date,
     },
     updated_at: {
         type: Date,
     }
-}, { 
-    timestamps: { 
+}, {
+    timestamps: {
         createdAt: 'created_at',
         updatedAt: 'updated_at'
-    } 
+    }
 });
 
 const model = mongoose.model("User", userSchema);

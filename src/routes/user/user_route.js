@@ -2,11 +2,23 @@ const userController = require("../../controllers/user_controller");
 const Context = require("../../services/context");
 const { router, id } = Context.Pull();
 
-router.get("/user", userController.list);
-router.get("/user/:id", userController.read);
-router.post("/user", userController.insert);
-router.delete("/user/:id", userController.delete);
-router.put("/user/:id", userController.update);
-router.post("/user/login", userController.login);
+// Register User
+router.post("/users", userController.userRegister);
+
+// Login User
+router.post("/users/login", userController.userLogin);
+
+// Get all users
+router.get("/users", userController.listAllUsers);
+
+// Get user by Id
+router.get("/users/:id", userController.getUserById);
+
+// Update User by Id
+router.put("/users/:id", userController.updateUserById);
+
+// Delete user by Id
+router.delete("/users/:id", userController.deleteUserById);
+
 
 module.exports = router;
