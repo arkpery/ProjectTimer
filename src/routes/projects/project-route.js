@@ -1,6 +1,6 @@
 
 
-const projects = require("../../controllers/projectController.js");
+const projects = require("../../controllers/project-controller.js");
 const Context = require("../../services/context");
 const { router, id } = Context.Pull();
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
