@@ -12,12 +12,12 @@ const groupSchema = mongoose.Schema({
     admin: {
         type: ObjectId,
         ref: 'User',
-        require: "Admin is required"
+        required: [true, "Admin is required"]
     },
     members: [{
         type: ObjectId,
         ref: 'User',
-        require: "Members is required"
+        required: [true, "Members is required"]
     }],
 
 

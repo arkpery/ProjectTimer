@@ -3,7 +3,7 @@ const User = require("../models/user_model").Model;
 
 /**
  * 
- * @param {*} req 
+ * @param {Array} req 
  * @param {*} res 
  */
 exports.getAllGroups = async (req, res) => {

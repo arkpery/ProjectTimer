@@ -106,7 +106,12 @@ exports.listAllUsers = async (req, res) => {
         }, {
             skip: firstIndex,
             limit: perPage
-        }).populate("groups");
+        }).populate([{
+            path: "groups",
+            populate: {
+                path: "admin"
+            }
+        }]);
 
         res.json(list);
     } catch (e) {

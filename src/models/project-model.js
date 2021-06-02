@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
  * Define project model
  */
 const projectSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
         required: "Le nom du projet est requis",
@@ -19,18 +18,16 @@ const projectSchema = mongoose.Schema({
         require: "Admin is required"
     },
 
-    // timers: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Timer',
-    //     require: "Timer is required"
-    // }],
-
-
     groups: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Group',
         required: true
     }],
+
+    timer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Timer'
+    },
 
     close: {
         type: Boolean,
