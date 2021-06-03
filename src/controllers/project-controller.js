@@ -146,11 +146,7 @@ exports.deleteProject = async (req, res) => {
         const decoded = await projectJwt.decode_token(req)
         await projectServices.checkIfAdmin(project, decoded.user.id)
 
-        const fieldsFilter = {
-            _id: project
-        }
-
-        Project.deleteOne(fieldsFilter, (error) => {
+        Project.deleteOne({ _id: project }, (error) => {
             if (error) console.log(error)
             res.status(200).json({ message: `project "${project}" successfully removed` })
         })

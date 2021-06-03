@@ -1,5 +1,7 @@
 const Group = require("../models/group_model").Model;
 const User = require("../models/user_model").Model;
+const groupJwt = require('../middleware/jwtMiddleware')
+const groupServices = require('../services/groups-services')
 
 /**
  * 
@@ -98,23 +100,25 @@ exports.createGroup = async (req, res) => {
  * @returns 
  */
 exports.deleteGroupById = async (req, res) => {
-    const id = req.params.id;
 
     try {
-        const group = await Group.findById(id).populate("admin").populate("members");
 
+        const groupId = req.params.id
+        const decoded = await groupJwt.decode_token(req)
+        await groupServices.checkIfAdmin(groupId, decoded.user.id)
+
+        const group = await Group.findById(groupId).populate("admin").populate("members");
         if (!group) {
             res.status(404).json({
                 err: "group not found"
             });
             return;
         }
-        console.log(group.members.length)
         if (group.members.length) {
             throw new Error(`the group has members`);
         }
         const user = await User.findById(group.admin._id).populate("groups");
-        user.groups = user.groups.filter(group => group._id != id);
+        user.groups = user.groups.filter(group => group._id != groupId);
         await user.save();
         const status = await group.delete();
         res.json({
@@ -134,8 +138,11 @@ exports.deleteGroupById = async (req, res) => {
  * @param {*} res 
  */
 exports.updateGroupById = async (req, res) => {
-    const body = req.body;
     const id = req.params.id;
+    const decoded = await groupJwt.decode_token(req)
+    await groupServices.checkIfAdmin(id, decoded.user.id)
+
+    const body = req.body;
     body._id = id;
     if (!body.members) {
         body.members = [];

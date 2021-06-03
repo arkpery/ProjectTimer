@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Model = mongoose.model("Group")
+const Group = require("../models/group_model").Model;
 const AppError = require("../errors/app-errors")
 const { isValidId } = require('../middleware/isValidParamsId')
 
@@ -26,6 +26,40 @@ exports.checkListGroups = async (list) => {
     if (notExist.length || notValid.length) {
         throw new AppError(`Some id aren't valid or don't exist (not valid : ${notValid}, not exist: ${notExist})`)
 
+    }
+
+    return true
+}
+
+/**
+ * 
+ * @param {*} group 
+ * @param {*} user 
+ * @returns 
+ */
+exports.checkIfAdmin = async (group, user) => {
+    await this.checkValidGroupId(group)
+
+    const fieldsFilter = {
+        _id: group,
+        admin: {
+            _id: user
+        }
+    }
+
+    const isAdmin = await Group.exists(fieldsFilter)
+    if (!isAdmin) throw new AppError("You must be an administrator of this group to perform this operation")
+
+    return true
+}
+
+exports.checkValidGroupId = async (id) => {
+    if (!isValidId(id)) {
+        throw new AppError("This id isn't valid : " + id, 400)
+    } else {
+
+        const exist = await Group.exists({ _id: id })
+        if (!exist) throw new AppError("This id don't exist : " + id, 400)
     }
 
     return true
