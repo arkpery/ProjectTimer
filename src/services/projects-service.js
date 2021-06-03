@@ -1,7 +1,7 @@
 const Project = require('../models/project-model');
 const groupServices = require('../services/groups-services')
 const userServices = require('../services/users-services')
-const { isValidId } = require('../utils/validParamsId')
+const { isValidId } = require('../middleware/isValidParamsId')
 const AppError = require("../errors/app-errors")
 const projectJwt = require('../middleware/jwtMiddleware')
 

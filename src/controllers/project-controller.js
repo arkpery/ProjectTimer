@@ -5,7 +5,7 @@ const Timer = require('../models/timer-model.js');
 const User = require('../models/user_model');
 const projectServices = require('../services/projects-service')
 const projectJwt = require('../middleware/jwtMiddleware')
-const { errorHandler } = require('../utils/errorsHandler')
+const { errorHandler } = require('../middleware/errorsHandler')
 
 
 

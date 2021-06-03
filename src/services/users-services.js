@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require("../models/user_model").Model;
 const AppError = require('../errors/app-errors')
-const { isValidId } = require("../utils/validParamsId")
+const { isValidId } = require("../middleware/isValidParamsId")
 
 /**
  * 

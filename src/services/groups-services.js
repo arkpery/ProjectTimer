@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Model = mongoose.model("Group")
 const AppError = require("../errors/app-errors")
-const { isValidId } = require('../utils/validParamsId')
+const { isValidId } = require('../middleware/isValidParamsId')
 
 /**
  * 
