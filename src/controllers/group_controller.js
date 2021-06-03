@@ -1,7 +1,14 @@
 const Group = require("../models/group_model").Model;
 const User = require("../models/user_model").Model;
+const groupJwt = require('../middleware/jwtMiddleware')
+const groupServices = require('../services/groups-services')
 
-exports.list = async (req, res) => {
+/**
+ * 
+ * @param {Array} req 
+ * @param {*} res 
+ */
+exports.getAllGroups = async (req, res) => {
     const perPage = req.query.perPage ?? 10;
     const numPage = req.query.numPage ?? 1;
     const firstIndex = perPage * (numPage - 1);
@@ -10,29 +17,37 @@ exports.list = async (req, res) => {
         const list = await Group.find({}, null, {
             skip: firstIndex,
             limit: perPage
-        }).populate("admin").populate("members");
+        }).populate("admin", ['email', 'firstname', 'lastname', 'groups', 'avatar']).populate("members", ['email', 'firstname', 'lastname', 'groups', 'avatar']);
 
         res.json(list);
     }
-    catch (e){
+    catch (e) {
         res.status(400).json({
             err: e.message
         });
     }
 };
 
-exports.read = async (req, res) => {
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.getGroupById = async (req, res) => {
     const id = req.params.id;
 
     try {
         const group = await Group.findById(id).populate({
             path: "admin",
+            select: 'email firstname lastname groups avatar',
             populate: {
-                path: "groups"
-            }
-        }).populate("members");
+                path: "groups",
 
-        if (!group){
+            },
+        }).populate('members', ['email', 'firstname', 'lastname', 'groups', 'avatar']);
+
+        if (!group) {
             res.status(404).json({
                 message: "group not found"
             });
@@ -40,14 +55,19 @@ exports.read = async (req, res) => {
         }
         res.json(group);
     }
-    catch (e){
+    catch (e) {
         res.status(400).json({
             err: e.message
         });
     }
 };
 
-exports.insert = async (req, res) => {
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.createGroup = async (req, res) => {
     const body = req.body;
     const group = new Group(body);
 
@@ -59,55 +79,72 @@ exports.insert = async (req, res) => {
         user.groups.push(saved);
         await user.save();
         res.json({
-            message: `group ${group.name} inserted`,
+            message: `group ${group.name} created by : ${user.lastname} ${user.firstname} `,
             data: {
-                "_id": saved._id,
+                "id": saved._id,
                 "name": saved.name
             }
         });
     }
-    catch (e){
+    catch (e) {
         res.status(400).json({
             err: e.message
         });
     }
 };
 
-exports.delete = async (req, res) => {
-    const id = req.params.id;
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.deleteGroupById = async (req, res) => {
 
     try {
-        const group = await Group.findById(id).populate("admin").populate("members");
 
-        if (!group){
+        const groupId = req.params.id
+        const decoded = await groupJwt.decode_token(req)
+        await groupServices.checkIfAdmin(groupId, decoded.user.id)
+
+        const group = await Group.findById(groupId).populate("admin").populate("members");
+        if (!group) {
             res.status(404).json({
                 err: "group not found"
             });
             return;
         }
-        if (group.members.length){
+        if (group.members.length) {
             throw new Error(`the group has members`);
         }
         const user = await User.findById(group.admin._id).populate("groups");
-        user.groups = user.groups.filter(group => group._id != id);
+        user.groups = user.groups.filter(group => group._id != groupId);
         await user.save();
         const status = await group.delete();
         res.json({
             message: `group ${group.name} deleted`
         });
     }
-    catch (e){
+    catch (e) {
         res.status(400).json({
             err: e.message
         });
     }
 };
 
-exports.update = async (req, res) => {
-    const body = req.body;
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.updateGroupById = async (req, res) => {
     const id = req.params.id;
+    const decoded = await groupJwt.decode_token(req)
+    await groupServices.checkIfAdmin(id, decoded.user.id)
+
+    const body = req.body;
     body._id = id;
-    if (!body.members){
+    if (!body.members) {
         body.members = [];
     }
     const data_members = body.members.slice();
@@ -123,25 +160,25 @@ exports.update = async (req, res) => {
             groups: [id]
         });
 
-        for (let i = 0; i < users.length; i++){
+        for (let i = 0; i < users.length; i++) {
             const user = users[i];
             let flag = true;
 
-            for (let member of members){
-                if (user._id.toString() == member.toString()){
+            for (let member of members) {
+                if (user._id.toString() == member.toString()) {
                     flag = false;
                 }
             }
-            if (user._id.toString() == updated.admin.toString()){
+            if (user._id.toString() == updated.admin.toString()) {
                 console.log("enter");
             }
-            else if (flag){
+            else if (flag) {
                 let f2 = true;
 
-                while (f2){
+                while (f2) {
                     const index = user.groups.findIndex(el => el.toString() == id.toString());
 
-                    if (index > -1){
+                    if (index > -1) {
                         user.groups.splice(index, 1);
                     }
                     else {
@@ -151,16 +188,16 @@ exports.update = async (req, res) => {
                 await user.save();
             }
         }
-        for (let member of members){
+        for (let member of members) {
             const user = await User.findById(member);
             let flag = true;
 
-            for (let group of user.groups){
-                if (group.toString() == id.toString()){
+            for (let group of user.groups) {
+                if (group.toString() == id.toString()) {
                     flag = false;
                 }
             }
-            if (flag){
+            if (flag) {
                 user.groups.push(id);
                 await user.save();
             }
@@ -169,7 +206,7 @@ exports.update = async (req, res) => {
             message: `group ${updated.name} updated`
         });
     }
-    catch (e){
+    catch (e) {
         res.status(400).json({
             err: e.message
         });

@@ -1,102 +1,229 @@
 
+
+  
+
 # Utilisateur
+
+  
 
 Liste de tous les les points d'entrée lié à la gestion d'un utilisateur, ils commencent tous par `/users`.
 
+  
+
 ### GET
 
-- `GET /users/{id}` : Retourne les informations d'un utilisateur
+  
+-  `GET /users` : Retourne la liste et les informations de tous les utilisateurs
 
-  - Parametre dans l'URL :
+- Retour :
+```json
+[
+{
+	"groups": [],
+	"_id": "60b639ee353fa2022687d0e5",
+	"email": "test@gmail.com",
+	"firstname": "firstname",
+	"lastname": "lastname",
+	"birthdate": "2000-01-01T00:00:00.000Z",
+	"avatar": "avatar",
+	"created_at": "2021-06-01T13:45:18.673Z",
+	"updated_at": "2021-06-01T13:45:18.673Z",
+	"__v": 0
+},
 
-    - `id` : L'id de l'utilisateur
+{
+	"groups": [],
+	"_id": "60b63a34d4eab7023501221d",
+	"email": "test2@gmail.com",
+	"firstname": "firstname",
+	"lastname": "lastname",
+	"birthdate": "2000-01-01T00:00:00.000Z",
+	"avatar": "avatar",
+	"created_at": "2021-06-01T13:46:28.631Z",
+	"updated_at": "2021-06-01T13:46:28.631Z",
+	"__v": 0
+}
+]
+```
 
-  - Retour :
-... ( A compélter)
+-  `GET /users/:id` : Retourne les informations d'un utilisateur
+
+  
+
+	- Parametre dans l'URL :
+
+		-  `id` : L'id de l'utilisateur
+
+  
+
+- Retour :
+```json
+{
+	"groups": [],
+	"_id": "60b639ee353fa2022687d0e5",
+	"email": "test@gmail.com",
+	"firstname": "firstname",
+	"lastname": "lastname",
+	"birthdate": "2000-01-01T00:00:00.000Z",
+	"avatar": "avatar",
+	"created_at": "2021-06-01T13:45:18.673Z",
+	"updated_at": "2021-06-01T13:45:18.673Z",
+	"__v": 0
+}
+```
+  
 
 ### POST
 
-- `POST /users/login` : Connexion d'un utilisateur
+  
 
-  - Parametre dans la requete HTTP :
+-  `POST /users/login` : Connexion d'un utilisateur
 
-    - `login` : L'email de l'utilisateur (doit être unique), :question: possibilité plus tard de prendre un autre identifiant unique.
-    - `password` : Le mot de passe de l'utilisateur 
+	-  `email` : L'email de l'utilisateur (doit être unique)
 
-    ```json
-    {
-        "login": "test@email.com",
-        "password": "azerty"
-    }
-    ```
+	-  `password` : Le mot de passe de l'utilisateur
 
-  - Retour :
+  
 
-    ```json
-    {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.e06MJM0W2IGKwyOzwQEgNhrXgSi3envVExGR9uoKplQ",
-        "user": {
-            "id": 6,
-            "name": "John Doe",
-            "email": "test@email.com",
-            ...
-        }
-    }
-    ```
+```json
 
-- `POST /users` : Inscription d'un utilisateur
+{
+	"email": "test@gmail.com",
+	"password" : "azerty"
+}
 
-  - Parametre dans la requete HTTP :
+```
 
-    - `name` : Le nom de l'utilisateur
-    - `email` : L'email de l'utilisateur (doit être unique, est vérifié sur le serveur)
-    - `password` : Le mot de passe
-    - ..
+  
 
-    ```json
-    {
-        "name": "John Doe",
-        "email": "test@email.com",
-        "password": "azerty"
-    }
-    ```
+- Retour :
 
+  
+
+```json
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjBiNjM5ZWUzNTNmYTIwMjI2ODdkMGU1IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2MjI1NTUzNzcsImV4cCI6MTYyNTE0NzM3N30.4sqMSNzR1IKv04erwkO9Hg8L-SLqgOlRBsmeAxRdYJk",
+	"user": {
+		"id": "60b639ee353fa2022687d0e5",
+		"email": "test@gmail.com"
+	}
+}
+
+```
+
+  
+
+-  `POST /users` : Inscription d'un utilisateur
+
+	-  `email` : L'email de l'utilisateur (doit être unique, est vérifié sur le serveur)
+
+	-  `password` : Le mot de passe
+
+	-  `firstname` : Le prénom de l'utilisateur
+
+	- `lastname` : Le nom de l'utilisateur
+
+	-  `password` : Le mot de passe
+
+	-   `birthdate` : La date de naissance
+ 
+	-   `avatar` : L'avatar de l'utilisateur
+
+	-   `groups` : L'ensemble des groupes dont l'utilisateur appartient
+
+```json
+{
+	"email":"test@gmail.com",
+	"firstname": "firstname",
+	"lastname": "lastname",
+	"password": "azerty",
+	"birthdate" : "01-01-2000",
+	"groups" : [],
+	"avatar" : "avatar"
+}
+```
+
+- Retour :
+
+```json
+{
+	"data": {
+	"_id": "60b63cdd686dc90274f9a57e",
+	"email": "test@gmail.com"
+	},
+	"message": "user test@gmail.com created"
+}
+
+```
+
+  
+  
 
 ### PUT
+ 
 
-- `PUT /users/refresh` : Actualise le token de l'utilisateur connecté pour prolonger sa validité en générant un nouveau token
+-  `PUT /users/:id` : Modification d'un utilisateur 
 
-    - Retour :
-      
-          ```json
-          {
-              "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.e06MJM0W2IGKwyOzwQEgNhrXgSi3envVExGR9uoKplQ",
-          }
-          ```
+  
+	- Parametre dans l'URL :
+		-  `id` : L'id de l'utilisateur
+		
+	- Parametre dans la requete :
+		- `email` (optionnel) : Le nouveau email de l'utilisateur (doit être unique, est vérifié sur le serveur)
 
-- `PUT /users` : Modification de l'utilisateur connecté (une erreur si aucun utilisateur n'est connecté)
+		-  `password (optionnel)` : Le nouveau mot de passe
 
-  - Parametre dans la requete HTTP :
+		-  `firstname (optionnel)` : Le nouveau prénom de l'utilisateur
 
-    - `name (optionnel)` : Le nouveau nom de l'utilisateur
-    - `email (optionnel)` : Le nouvelle email de l'utilisateur (doit être unique, est vérifié sur le serveur)
-    - `password (optionnel)` : Le nouveau mot de passe
+		- `lastname (optionnel)` : Le nouveau nom de l'utilisateur
 
-    ```json
-    {
-        "name": "John Doe",
-        "email": "test@email.com",
-        "password": "azerty"
-    }
-    ```
+		-   `birthdate` : La nouvelle date de naissance
+ 
+		-   `avatar` : La date de naissance
+		
+		-   `groups` : ajouter L'ensemble des groupes dont l'utilisateur appartient
 
-  - Retour :
 
-    ```json
-    {
-    	"id": 6,
-        "name": "John Doe",
-        "email": "test@email.com",
-        "tag": "John_Doe#08520"
-    }
-    ```
+```json
+
+{
+	"email" : "testupdate@gmail.com",
+	"lastname": "test updating lastname",
+	"avatar" : "updating avatar"
+}
+
+```
+
+  
+
+- Retour :
+
+  
+
+```json
+{
+	"message": "user 60b63d400d353f02824ba07c updated",
+	"user": {
+		"groups": [],
+		"_id": "60b63d400d353f02824ba07c",
+		"email": "testupdate@gmail.com",
+		"lastname": "test updating lastname",
+		"avatar": "updating avatar"
+	}
+}
+```
+
+### DELETE
+
+-  `DELETE /users/:id` : Suppression d'un utilisateur
+	- Parametre dans l'URL :
+		-  `id` : L'id de l'utilisateur
+  
+
+- Retour :
+
+```json
+{
+	"message": "user 60b63d400d353f02824ba07c deleted"
+}
+```
