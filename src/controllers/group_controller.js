@@ -204,7 +204,7 @@ exports.updateGroupById = async (req, res) => {
             }
         }
         res.json({
-            message: translator.translate("GROUP_UPDATED", updated.name)
+            message: translator.translate("GROUP_UPDATED", updated.name),
             updated
         });
     }
