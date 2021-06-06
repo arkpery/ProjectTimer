@@ -3,6 +3,7 @@ const Group = require("./group_model").Schema;
 const ObjectId = mongoose.SchemaTypes.ObjectId;
 const Schema = mongoose.Schema;
 const translator = require("../services/translate");
+const crypto = require('crypto');
 
 const userSchema = mongoose.Schema({
     email: {
@@ -33,6 +34,8 @@ const userSchema = mongoose.Schema({
     groups: [{
         type: Schema.Types.ObjectId, ref: "Group"
     }],
+
+    accessToken: { type: String, default: null },
 
 }, {
     timestamps: {
