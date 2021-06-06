@@ -4,7 +4,14 @@ const AppError = require("../errors/app-errors");
 
 exports.getTimersStartedByProject = async (projectId) => {
     const timers = await Timer.find({
-        duration: 0,
+        "$or": [
+            {
+                duration: 0
+            },
+            {
+                duration: undefined
+            }
+        ],
         project: projectId
     });
 

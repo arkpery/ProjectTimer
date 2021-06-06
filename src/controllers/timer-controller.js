@@ -16,6 +16,7 @@ const timersService = require("../services/timers-services");
 exports.setTimer = async (req, res) => {
     try {
         const t = req.body;
+        t.duration = 0;
         const timer = new Timer(t);
 
         await timer.save(async (error, created) => {
