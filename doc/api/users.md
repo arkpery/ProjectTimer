@@ -1,18 +1,11 @@
+# Users
 
-
-  
-
-# Utilisateur
-
-  
 
 Liste de tous les les points d'entrée lié à la gestion d'un utilisateur, ils commencent tous par `/users`.
 
-  
 
 ### GET
 
-  
 -  `GET /users` : Retourne la liste et les informations de tous les utilisateurs
 
 - Retour :
