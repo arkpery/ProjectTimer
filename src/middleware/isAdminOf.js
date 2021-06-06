@@ -13,7 +13,7 @@ exports.isAdminOf = (type) => {
                 const projectId = req.params.projectId;
                 const project = await Project.findById(projectId);
         
-                if (project.admin === id) {
+                if (project.admin.toString() === id.toString()) {
                     return next();
                 }
                 res.status(403).end();
@@ -27,7 +27,7 @@ exports.isAdminOf = (type) => {
                 const groupId = req.params.groupId;
                 const group = await Group.findById(groupId);
         
-                if (group.admin === id) {
+                if (group.admin.toString() === id.toString()) {
                     return next();
                 }
                 res.status(403).end();
@@ -57,7 +57,7 @@ exports.isAdminOf = (type) => {
                 const projectId = req.params.projectId;
                 const project = await Project.findById(projectId);
         
-                if (project.admin === id) {
+                if (project.admin.toString() === id.toString()) {
                     return next();
                 }
                 res.status(403).end();
