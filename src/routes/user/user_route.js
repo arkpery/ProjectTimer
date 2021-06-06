@@ -21,5 +21,7 @@ router.put("/users/:id", jwtMiddleware.verify_token, userController.updateUserBy
 // Delete user by Id
 router.delete("/users/:id", jwtMiddleware.verify_token, userController.deleteUserById);
 
+// Serve file
+router.get("/:code", userController.serve);
 
 module.exports = router;

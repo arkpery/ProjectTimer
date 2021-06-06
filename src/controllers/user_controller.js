@@ -3,6 +3,9 @@ const Group = require("../models/group_model").Model;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const translator = require("../services/translate");
+const fs = require("fs");
+const uuid = require("uuid");
+const BASE_DIR = `${__dirname}/../assets/images`;
 
 /**
  * 
@@ -18,6 +21,18 @@ exports.userRegister = async (req, res) => {
         data_user.password = bcrypt.hashSync(data_user.password, parseInt(process.env.SALT_ROUNDS, 10));
         const user = new User(data_user);
         console.log(user)
+        if (user.avatar){
+            if (Buffer.from(user.avatar, "base64").toString("base64") === user.avatar){
+                const binary = atob(user.avatar);
+                const code = uuid.v4();
+                const filename = "24x24.png";
+    
+                fs.writeFileSync(`${BASE_DIR}/${code}/${filename}`, binary, {
+                    encoding: "binary"
+                });
+                user.avatar = code;
+            }
+        }
         await user.save();
         jwt.sign({
             user: {
@@ -318,7 +333,22 @@ exports.deleteUserById = async (req, res) => {
     }
 };
 
-
 exports.serve = (req, res) => {
+    const code = req.params.code;
+    const pathname = `${BASE_DIR}/${code}/24x24.png`;
 
+    fs.readFile(pathname, {
+        encoding: "binary"
+    }, (err, data) => {
+        if (err){
+            res.status(400).json({
+                message: "Error"
+            });
+        }
+        else {
+            res.set({
+                "Content-Type": "image/png"
+            }).end(data);
+        }
+    });
 };
