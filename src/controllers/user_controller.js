@@ -6,7 +6,7 @@ const translator = require("../services/translate");
 const fs = require("fs");
 const uuid = require("uuid");
 const BASE_DIR = `${__dirname}/../assets/images`;
-
+const userService = require("../services/users-services");
 /**
  * 
  * @param {*} req 
@@ -22,16 +22,7 @@ exports.userRegister = async (req, res) => {
         const user = new User(data_user);
 
         if (user.avatar){
-            if (Buffer.from(user.avatar, "base64").toString("base64") === user.avatar){
-                const binary = atob(user.avatar);
-                const code = uuid.v4();
-                const filename = "24x24.png";
-    
-                fs.writeFileSync(`${BASE_DIR}/${code}/${filename}`, binary, {
-                    encoding: "binary"
-                });
-                user.avatar = code;
-            }
+            userService.uploadAvatar(user);
         }
         await user.save();
         jwt.sign({
@@ -218,6 +209,9 @@ exports.updateUserById = async (req, res) => {
                 message: translator.translate("USER_NOT_FOUND")
             });
             return;
+        }
+        if (user.avatar){
+            userService.uploadAvatar(user);
         }
         const updated = await User.findByIdAndUpdate(id, user);
         updated.groups = groups;
