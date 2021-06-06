@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Group = require("./group_model").Schema;
 const ObjectId = mongoose.SchemaTypes.ObjectId;
 const Schema = mongoose.Schema;
+const translator = require("../services/translate");
 
 const userSchema = mongoose.Schema({
     email: {
@@ -12,9 +13,9 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        min: (8, 'Too short, min is 5 characters'),
-        max: (32, 'Too long, max is 32 characters'),
-        required: 'Password is required'
+        min: (8, translator.translate("FIVE_CHARACTERS_MIN")),
+        max: (32, translator.translate("32_CHARACTERS_MAX")),
+        required: translator.translate("PASSWORD_REQUIRED")
     },
     firstname: {
         type: String

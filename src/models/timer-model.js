@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const translator = require("../services/translate");
 
 /**
  * Define timer model
@@ -15,7 +16,7 @@ const TimerSchema = mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
-        require: "User is required"
+        require: translator.translate("USER_REQUIRED")
     },
 
     startTime: {
