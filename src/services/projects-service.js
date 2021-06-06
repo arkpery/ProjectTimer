@@ -1,9 +1,10 @@
 const Project = require('../models/project-model');
-const groupServices = require('../services/groups-services')
-const userServices = require('../services/users-services')
-const { isValidId } = require('../middleware/isValidParamsId')
-const AppError = require("../errors/app-errors")
-const projectJwt = require('../middleware/jwtMiddleware')
+const groupServices = require('../services/groups-services');
+const userServices = require('../services/users-services');
+const { isValidId } = require('../middleware/isValidParamsId');
+const AppError = require("../errors/app-errors");
+const projectJwt = require('../middleware/jwtMiddleware');
+const translator = require("./translate");
 
 
 
@@ -14,7 +15,7 @@ const projectJwt = require('../middleware/jwtMiddleware')
  */
 exports.verifData = async (req) => {
     const groups = req.body.groups
-    if (!groups) throw new AppError('Please insert a group')
+    if (!groups) throw new AppError(translator.translate("PLEASE_INSERT_GROUP"))
     await groupServices.checkListGroups(groups)
 
     const project = req.params.projectId
@@ -30,7 +31,7 @@ exports.verifData = async (req) => {
         console.log(adm)
     }
 
-    if (close === undefined) throw new AppError('Please set if the project is closed or no (set the \"close\" field to true for yes or false for no ) ')
+    if (close === undefined) throw new AppError(translator.translate("PLEASE_PROJECT_CLOSED"));
 
     let nameUsed
 
@@ -42,7 +43,7 @@ exports.verifData = async (req) => {
         nameUsed = await Project.exists({ name: name })
     }
 
-    if (nameUsed) throw new AppError('This name is already used')
+    if (nameUsed) throw new AppError(translator.translate("NAMED_ALREADY_USED"));
 }
 
 /**
@@ -52,10 +53,10 @@ exports.verifData = async (req) => {
  */
 exports.checkValidProjectId = async (id) => {
     if (!isValidId(id)) {
-        throw new AppError("This id isn't valid : " + id, 400)
+        throw new AppError(`${translator.translate("ID_NOT_VALID")} ${id}`, 400)
     } else {
         const exist = await Project.exists({ _id: id })
-        if (!exist) throw new AppError("This id don't exist : " + id, 400)
+        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
     }
 
     return true
@@ -80,7 +81,7 @@ exports.checkIfAdmin = async (project, user) => {
     }
 
     const isAdmin = await Project.exists(fieldsFilter)
-    if (!isAdmin) throw new AppError("You must be an administrator of this project to perform this operation")
+    if (!isAdmin) throw new AppError(translator.translate("GROUP_ADMINISTRATOR"));
 
     return true
 }

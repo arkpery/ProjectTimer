@@ -9,5 +9,13 @@ i18n.configure({
 
 i18n.setLocale('en');
 
-exports.translate = (key, params) => i18n.__(key, params);
+exports.translate = (key, params) => {  
+    if (params instanceof Array){
+        return i18n.__(key, ...params);
+    }
+    else {
+        return i18n.__(key, params);
+    }
+    return "";
+ };
 exports.locale = (key) => i18n.setLocale(key);

@@ -45,7 +45,7 @@ exports.createProject = async (req, res) => {
             })
         });
     } catch (error) {
-        console.log(error)
+        errorHandler(error, res);
     }
 };
 

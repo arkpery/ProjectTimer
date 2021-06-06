@@ -22,7 +22,7 @@ exports.setTimer = async (req, res) => {
         await timer.save(async (error, created) => {
             if (error) console.log(error)
             await created.populate({
-                path: "admin",
+                path: "user",
             }).populate('project').execPopulate();
             return res.status(200).json({
                 message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
@@ -45,7 +45,7 @@ exports.getTimerByProject = async (req, res) => {
         await projectService.checkValidProjectId(project)
 
         Timer.find({ project: project })
-            .populate('admin', ['email', 'firstName', 'lastName'])
+            .populate('user', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
                 if (error) console.log(error);
@@ -69,7 +69,7 @@ exports.getTimerByUser = async (req, res) => {
         await userService.checkValidUserId(user)
 
         Timer.find({ user: user })
-            .populate('admin', ['email', 'firstName', 'lastName'])
+            .populate('user', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
                 if (error) console.log(error);
@@ -93,7 +93,7 @@ exports.updateTimer = async (req, res) => {
         try {
             await Timer.findByIdAndUpdate(req.params.id, req.body);
             await Timer.findById(req.params.id)
-                .populate('admin')
+                .populate('user')
                 .populate('project')
                 .exec((error, result) => {
                     if (error) console.log(error)
@@ -153,12 +153,13 @@ exports.startTimer = async (req, res) => {
         const t = req.body;
         t.startTime = Date.now();
         t.duration = 0;
+        t.project = req.params.projectId;
         const timer = new Timer(t);
         await timer.save(async (error, created) => {
             if (error) console.log(error)
             await created.populate({
-                path: "admin",
-            }).populate('project').execPopulate();
+                path: "project",
+            }).populate('user').execPopulate();
             return res.status(200).json({
                 message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
                 created
@@ -177,7 +178,7 @@ exports.stopTimer = async (req, res) => {
         timer.duration = Date.now() - timer.startTime;
         await Timer.findByIdAndUpdate(req.params.id, timer);
         await Timer.findById(req.params.id)
-        .populate('admin')
+        .populate('user')
         .populate('project')
         .exec((error, result) => {
             if (error) console.log(error);
