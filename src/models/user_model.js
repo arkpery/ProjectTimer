@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Group = require("./group_model").Schema;
 const ObjectId = mongoose.SchemaTypes.ObjectId;
 const Schema = mongoose.Schema;
+const crypto = require('crypto');
 
 const userSchema = mongoose.Schema({
     email: {
@@ -40,7 +41,9 @@ const userSchema = mongoose.Schema({
     updated_at: {
         type: Date,
         default: Date.now()
-    }
+    },
+    accessToken: { type: String, default: null },
+
 }, {
     timestamps: {
         createdAt: 'created_at',

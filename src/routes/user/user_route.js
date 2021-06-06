@@ -9,6 +9,16 @@ router.post("/users", userController.userRegister);
 // Login User
 router.post("/users/login", userController.userLogin);
 
+// Reset Password
+router.post("/users/resetPassword", userController.resetPassword);
+
+// New Password
+router.post('/users/new-password', userController.NewPassword);
+
+// Check  the token with user id
+router.post('/users/valid-password-token', userController.ValidPasswordToken);
+
+
 // Get all users
 router.get("/users", jwtMiddleware.verify_token, userController.listAllUsers);
 
@@ -20,6 +30,9 @@ router.put("/users/:id", jwtMiddleware.verify_token, userController.updateUserBy
 
 // Delete user by Id
 router.delete("/users/:id", jwtMiddleware.verify_token, userController.deleteUserById);
+
+router.post("/users/logout", jwtMiddleware.verify_token, userController.Logout);
+
 
 
 module.exports = router;
