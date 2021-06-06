@@ -13,12 +13,12 @@ router.post('/projects', jwtMiddleware.verify_token, projects.createProject);
 router.get('/projects', jwtMiddleware.verify_token, projects.getAllProjects);
 
 // Get a  Project by projectId
-router.get('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf()], projects.getProjectById);
+router.get('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.getProjectById);
 
 // Update a Project by projectId
-router.put('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf()], projects.updateProject);
+router.put('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.updateProject);
 
 // Delete a Project by projectId
-router.delete('/projects/:projectId',  [jwtMiddleware.verify_token, isAdminOf()], projects.deleteProject);
+router.delete('/projects/:projectId',  [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.deleteProject);
 
 module.exports = router;
