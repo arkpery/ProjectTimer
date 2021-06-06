@@ -27,5 +27,7 @@
     "GROUP_UPDATED": "Group %s updated",
     "PROJECT_EMPTY": "Project not exist",
     "USER_EMPTY": "User not exist",
+    "TIMER_EMPTY": "Timer not exist",
+    "GROUP_EMPTY": "Group not exist",
     "PROJECT_DELETED": "The project is deleted"
 }

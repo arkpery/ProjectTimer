@@ -27,5 +27,7 @@
     "GROUP_UPDATED": "Groupe %s mis à jour",
     "PROJECT_EMPTY": "Le projet n'existe pas",
     "USER_EMPTY": "Utilisateur invalide",
+    "TIMER_EMPTY": "La tâche n'existe pas",
+    "GROUP_EMPTY": "Le groupe n'existe pas",
     "PROJECT_DELETED": "Le projet est supprimé"
 }

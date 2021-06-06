@@ -143,7 +143,7 @@ exports.deleteProject = async (req, res) => {
 
         Project.deleteOne({ _id: project }, (error) => {
             if (error) console.log(error)
-            res.status(200).json({ message: translator.translate("PROJECT_CREATED_SUCCESSFULLY", project) })
+            res.status(200).json({ message: translator.translate("PROJECT_DELETED", project) })
         })
 
     } catch (error) {
