@@ -41,8 +41,6 @@ exports.isAdminOf = (type) => {
                 const timerId = req.params.timerId;
                 const timer = await Timer.findById(timerId).populate("project");
         
-                console.log(timer.project.admin.toString());
-                console.log(id.toString());
                 if (timer.project.admin.toString() === id.toString()) {
                     return next();
                 }
