@@ -1,4 +1,3 @@
-
 const timers = require("../../controllers/timer-controller.js");
 const Context = require("../../services/context");
 const { router, id } = Context.Pull();
@@ -18,5 +17,11 @@ router.put('/timers/:timerId', jwtMiddleware.verify_token, timers.updateTimer);
 
 // Delete a Timer by timerId
 router.delete('/timers/:timerId', jwtMiddleware.verify_token, timers.deleteTimer);
+
+// Start timer
+router.post("/timers/:projectId/start", jwtMiddleware.verify_token, timers.startTimer);
+
+// Stop timer
+router.put("/timers/:projectId/stop/:id", jwtMiddleware.verify_token, timers.stopTimer);
 
 module.exports = router;

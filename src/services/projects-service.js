@@ -20,7 +20,6 @@ exports.verifData = async (req) => {
     const project = req.params.projectId
     const name = req.body.name
     const close = req.body.close
-    const public = req.body.public
     console.log(project)
     const admin = req.body.admin
     if (admin) {
@@ -31,8 +30,7 @@ exports.verifData = async (req) => {
         console.log(adm)
     }
 
-    if (!close) throw new AppError('Please set if the project is closed or no (set the \"close\" field to true for yes or false for no ) ')
-    if (!public) throw new AppError('Please define if the project is visible to everyone or not (set the \"public\" field to true for yes or false for no) ')
+    if (close === undefined) throw new AppError('Please set if the project is closed or no (set the \"close\" field to true for yes or false for no ) ')
 
     let nameUsed
 

@@ -24,20 +24,11 @@ const projectSchema = mongoose.Schema({
         required: true
     }],
 
-    timer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Timer'
-    },
-
     close: {
         type: Boolean,
         default: false,
     },
 
-    public: {
-        type: Boolean,
-        default: false,
-    },
     created_at: {
         type: Date,
         default: Date.now()

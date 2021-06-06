@@ -1,12 +1,13 @@
-
 const mongoose = require('mongoose');
 const Timer = require('../models/timer-model');
 const Project = require('../models/project-model');
 const { isValidId } = require("../middleware/isValidParamsId")
 const { errorHandler } = require('../middleware/errorsHandler')
 const AppError = require("../errors/app-errors")
-
-
+const projectService = require("../services/projects-service");
+const userService = require('../services/users-services');
+const translator = require("../services/translate");
+const timersService = require("../services/timers-services");
 /**
  * 
  * @param {*} req 
@@ -14,7 +15,20 @@ const AppError = require("../errors/app-errors")
  */
 exports.setTimer = async (req, res) => {
     try {
+        const t = req.body;
+        t.project = req.params.project_id;
+        const timer = new Timer(t);
 
+        await timer.save(async (error, created) => {
+            if (error) console.log(error)
+            await created.populate({
+                path: "admin",
+            }).populate('project').execPopulate();
+            return res.status(200).json({
+                message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
+                created
+            })
+        });
     } catch (error) {
         errorHandler(error, res)
     }
@@ -30,13 +44,12 @@ exports.getTimerByProject = async (req, res) => {
         const project = req.params.timerId
         await projectService.checkValidProjectId(project)
 
-
         Timer.find({ project: project })
-            .populate('user', ['email', 'firstName', 'lastName'])
+            .populate('admin', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
-                if (error) console.log(error)
-                res.status(200).json(result)
+                if (error) console.log(error);
+                res.status(200).json(result);
             })
 
     } catch (error) {
@@ -55,12 +68,12 @@ exports.getTimerByUser = async (req, res) => {
         const user = req.params.timerId
         await userService.checkValidUserId(user)
 
-        Model.find({ user: user })
-            .populate('user', ['email', 'firstName', 'lastName'])
+        Timer.find({ user: user })
+            .populate('admin', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
-                if (error) console.log(error)
-                res.status(200).json(result)
+                if (error) console.log(error);
+                res.status(200).json(result);
             })
 
     } catch (error) {
@@ -77,7 +90,19 @@ exports.getTimerByUser = async (req, res) => {
  */
 exports.updateTimer = async (req, res) => {
     try {
+        try {
+            await Timer.findByIdAndUpdate(req.params.id, req.body);
+            await Timer.findById(req.params.id)
+                .populate('admin')
+                .populate('project')
+                .exec((error, result) => {
+                    if (error) console.log(error)
 
+                    res.status(200).json(result)
+                });
+        } catch (error) {
+            errorHandler(error, res)
+        }
     } catch (error) {
         errorHandler(error, res)
     }
@@ -93,12 +118,11 @@ exports.deleteTimer = async (req, res) => {
         const timer = req.params.timerId
         await this.checkTimerId(timer)
 
-
         Timer.findByIdAndRemove({ _id: req.params.id }, (error) => {
 
-            res.status(200).json({ "message": "timer successfully removed" })
+            res.status(200).json({ "message": translator.translate("TIMER_REMOVED_SUCCESSFULLY") })
             if (error) console.log(error)
-        })
+        });
 
     } catch (error) {
         errorHandler(error, res)
@@ -112,11 +136,55 @@ exports.deleteTimer = async (req, res) => {
  */
 exports.checkTimerId = async (id) => {
     if (!isValidId(id)) {
-        throw new AppError("This id is not valid : " + id, 400)
+        throw new AppError(`${translator.translate("ID_NOT_VALID")} ${id}`, 400)
     } else {
         const exist = await Timer.exists({ _id: id })
-        if (!exist) throw new AppError("This id do not exist : " + id, 400)
+        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
     }
 
     return true
 }
+
+
+exports.startTimer = async (req, res) => {
+    try {
+        await timersService.canStart(req.params.projectId);
+
+        const t = req.body;
+        t.startTime = Date.now();
+        t.duration = 0;
+        const timer = new Timer(t);
+        await timer.save(async (error, created) => {
+            if (error) console.log(error)
+            await created.populate({
+                path: "admin",
+            }).populate('project').execPopulate();
+            return res.status(200).json({
+                message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
+                created
+            });
+        });
+    } catch (error) {
+        errorHandler(error, res);
+    }
+};
+
+exports.stopTimer = async (req, res) => {
+    try {
+        await timersService.canStop(req.params.projectId);
+
+        const timer = await Timer.findById(req.params.id);
+        timer.duration = Date.now() - timer.startTime;
+        await Timer.findByIdAndUpdate(req.params.id, timer);
+        await Timer.findById(req.params.id)
+        .populate('admin')
+        .populate('project')
+        .exec((error, result) => {
+            if (error) console.log(error);
+
+            res.status(200).json(result);
+        });
+    } catch (error) {
+        errorHandler(error, res);
+    }
+};

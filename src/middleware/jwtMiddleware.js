@@ -44,6 +44,5 @@ exports.decode_token = (req, res) => {
 
     const decoded = jwt.verify(usertoken, jwtKey);
     return decoded
-
 }
 

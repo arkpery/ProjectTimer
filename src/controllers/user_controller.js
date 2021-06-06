@@ -2,6 +2,7 @@ const User = require("../models/user_model").Model;
 const Group = require("../models/group_model").Model;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const translator = require("../services/translate");
 
 /**
  * 
@@ -23,7 +24,7 @@ exports.userRegister = async (req, res) => {
                 "_id": user.id,
                 "email": user.email
             },
-            message: `user ${user.email} created`
+            message: translator.translate(`USER_CREATED`, user.email)
         });
     } catch (e) {
         res.status(400).json({
@@ -60,7 +61,7 @@ exports.userLogin = async (req, res) => {
                     res.status(400);
                     console.log(error);
                     res.json({
-                        message: "Server Error."
+                        message: translator.translate(`SERVER_ERROR`)
                     });
                 } else {
                     res.status(200);
@@ -77,15 +78,14 @@ exports.userLogin = async (req, res) => {
             res.status(403);
             console.log(error);
             res.json({
-                message: "Authentification incorrect."
+                message: translator.translate("AUTHENTICATION_NO_CORRECT")
             });
         }
 
 
     } catch (e) {
         res.status(400).json({
-            message: "User not found."
-
+            message: translator.translate("USER_NOT_FOUND")
         });
     }
 };
@@ -147,7 +147,7 @@ exports.getUserById = async (req, res) => {
 
         if (!user) {
             res.status(404).json({
-                err: "user not found"
+                err: translator.translate(`USER_NOT_FOUND`)
             });
             return;
         }
@@ -181,7 +181,7 @@ exports.updateUserById = async (req, res) => {
         const userdb = await User.findById(id);
         if (!userdb) {
             res.status(404).json({
-                message: `user not found`
+                message: translator.translate("USER_NOT_FOUND")
             });
             return;
         }
@@ -233,7 +233,7 @@ exports.updateUserById = async (req, res) => {
             await grp.save();
         }
         res.json({
-            message: `user ${updated.id} updated`,
+            message: translator.translate(`USER_UPDATED`, user.id),
             user
         });
     } catch (e) {
@@ -264,7 +264,7 @@ exports.deleteUserById = async (req, res) => {
         });
         if (!user) {
             res.status(404).json({
-                err: "user not found"
+                err: translator.translate(`USER_NOT_FOUND`)
             });
             return;
         }
@@ -287,10 +287,10 @@ exports.deleteUserById = async (req, res) => {
         if (flag) {
             await user.delete();
             res.json({
-                message: `user ${user.id} deleted`
+                message: translator.translate("USER_DELETED", user.id)
             });
         } else {
-            throw new Error(`the user ${user.id} can't be deleted`);
+            throw new Error(translator.translate("USER_CAN_T_BE_DELETED", user.id));
         }
     } catch (e) {
         res.status(400).json({

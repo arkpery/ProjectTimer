@@ -6,7 +6,7 @@ const User = require('../models/user_model');
 const projectServices = require('../services/projects-service')
 const projectJwt = require('../middleware/jwtMiddleware')
 const { errorHandler } = require('../middleware/errorsHandler')
-
+const translator = require("../services/translate");
 
 
 /**
@@ -17,17 +17,16 @@ const { errorHandler } = require('../middleware/errorsHandler')
 exports.createProject = async (req, res) => {
     try {
         await projectServices.verifData(req)
-
+        const decoded = projectJwt.decode_token(req);
         // Create a Project
         const newProject = new Project(
             {
                 _id: mongoose.Types.ObjectId(),
                 name: req.body.name,
                 groups: req.body.groups,
-                admin: req.body.admin,
-                timer: req.body.timerId,
+                admin: decoded.user.id,
+                timers: [],
                 close: req.body.close,
-                public: req.body.public
             });
 
         newProject.save(async (error, created) => {
@@ -41,13 +40,10 @@ exports.createProject = async (req, res) => {
                 },
             }).populate('admin', ['email', 'firstname', 'lastname']).execPopulate();
             return res.status(200).json({
-                message: "Project created successfully",
+                message: translator.translate("PROJECT_CREATED_SUCCESSFULLY"),
                 created
             })
         });
-
-
-
     } catch (error) {
         console.log(error)
     }
@@ -86,14 +82,13 @@ exports.getProjectById = async (req, res) => {
         const fieldsFilter = {
             _id: project
         }
-
         await Project.findById(fieldsFilter)
             .populate('groups', ['name', 'admin', 'members'])
             .populate('admin', ['email', 'firstName', 'lastName'])
             .exec((error, result) => {
                 if (error) console.log(error)
                 res.status(200).json(result)
-            })
+            });
 
     } catch (error) {
         errorHandler(error, res)
@@ -109,12 +104,12 @@ exports.updateProject = async (req, res) => {
 
     try {
         await projectServices.verifData(req)
-
+        const decoded = projectJwt.decode_token(req);
 
         const update = {
             name: req.body.name,
             groups: req.body.groups,
-            admin: req.body.admin,
+            admin: decoded.user.id,
             close: req.body.close,
             public: req.body.public
         };
@@ -148,7 +143,7 @@ exports.deleteProject = async (req, res) => {
 
         Project.deleteOne({ _id: project }, (error) => {
             if (error) console.log(error)
-            res.status(200).json({ message: `project "${project}" successfully removed` })
+            res.status(200).json({ message: translator.translate("PROJECT_CREATED_SUCCESSFULLY", project) })
         })
 
     } catch (error) {

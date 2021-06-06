@@ -24,8 +24,7 @@ const TimerSchema = mongoose.Schema({
     },
 
     duration: {
-        type: Date,
-        default: Date.now()
+        type: Number,
     },
 
     project: {
