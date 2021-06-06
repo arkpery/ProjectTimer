@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const translator = require("../services/translate");
 
 /**
  * Define timer model
@@ -15,7 +16,7 @@ const TimerSchema = mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
-        require: "User is required"
+        require: translator.translate("USER_REQUIRED")
     },
 
     startTime: {
@@ -24,8 +25,7 @@ const TimerSchema = mongoose.Schema({
     },
 
     duration: {
-        type: Date,
-        default: Date.now()
+        type: Number,
     },
 
     project: {
@@ -34,17 +34,12 @@ const TimerSchema = mongoose.Schema({
         required: true
     },
 
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now()
+}, {
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
     }
-
-}
-);
+});
 
 
 module.exports = mongoose.model('Timer', TimerSchema);

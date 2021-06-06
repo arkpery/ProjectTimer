@@ -2,6 +2,7 @@ const Group = require("../models/group_model").Model;
 const User = require("../models/user_model").Model;
 const groupJwt = require('../middleware/jwtMiddleware')
 const groupServices = require('../services/groups-services')
+const translator = require("../services/translate");
 
 /**
  * Function to get the list and details of all groups
@@ -49,7 +50,7 @@ exports.getGroupById = async (req, res) => {
 
         if (!group) {
             res.status(404).json({
-                message: "group not found"
+                message: translator.translate("GROUP_NOT_FOUND")
             });
             return;
         }
@@ -79,7 +80,7 @@ exports.createGroup = async (req, res) => {
         user.groups.push(saved);
         await user.save();
         res.json({
-            message: `group ${group.name} created by : ${user.lastname} ${user.firstname} `,
+            message: translator.translate("GROUP_CREATED", [group.name, user.lastname, user.firstname]),
             data: {
                 "id": saved._id,
                 "name": saved.name
@@ -109,19 +110,19 @@ exports.deleteGroupById = async (req, res) => {
         const group = await Group.findById(groupId).populate("admin").populate("members");
         if (!group) {
             res.status(404).json({
-                err: "group not found"
+                err: translator.translate("GROUP_NOT_FOUND")
             });
             return;
         }
         if (group.members.length) {
-            throw new Error(`the group has members`);
+            throw new Error(translator.translate("GROUP_HAS_MEMBERS"));
         }
         const user = await User.findById(group.admin._id).populate("groups");
         user.groups = user.groups.filter(group => group._id != groupId);
         await user.save();
         const status = await group.delete();
         res.json({
-            message: `group ${group.name} deleted`
+            message: translator.translate("GROUP_DELETED", group.name)
         });
     }
     catch (e) {
@@ -203,7 +204,7 @@ exports.updateGroupById = async (req, res) => {
             }
         }
         res.json({
-            message: `group ${updated.name} updated`,
+            message: translator.translate("GROUP_UPDATED", updated.name)
             updated
         });
     }

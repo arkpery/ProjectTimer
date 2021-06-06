@@ -2,6 +2,11 @@ const User = require("../models/user_model").Model;
 const Group = require("../models/group_model").Model;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const translator = require("../services/translate");
+const fs = require("fs");
+const uuid = require("uuid");
+const BASE_DIR = `${__dirname}/../assets/images`;
+const userService = require("../services/users-services");
 const AppError = require("../errors/app-errors");
 const passwordResetToken = require('../models/resetToken.js');
 const crypto = require('crypto');
@@ -25,13 +30,35 @@ exports.userRegister = async (req, res) => {
     try {
         data_user.password = bcrypt.hashSync(data_user.password, parseInt(process.env.SALT_ROUNDS, 10));
         const user = new User(data_user);
+        if (user.avatar){
+            userService.uploadAvatar(user);
+        }
         await user.save();
-        res.json({
-            data: {
-                "_id": user.id,
-                "email": user.email
-            },
-            message: `user ${user.email} created`
+        jwt.sign({
+            user: {
+                id: user._id,
+                email: user.email
+            }
+        }, process.env.JWT_KEY, {
+            expiresIn: "30 days"
+        }, (error, token) => {
+            if (error) {
+                res.status(400);
+                console.log(error);
+                res.json({
+                    message: translator.translate(`SERVER_ERROR`)
+                });
+            } else {
+                res.status(200);
+                res.json({
+                    "token": token,
+                    user: {
+                        id: user._id,
+                        email: user.email
+                    },
+                    message: translator.translate(`USER_CREATED`, user.email)
+                });
+            }
         });
     } catch (e) {
         res.status(400).json({
@@ -68,7 +95,7 @@ exports.userLogin = async (req, res) => {
                     res.status(400);
                     console.log(error);
                     res.json({
-                        message: "Server Error."
+                        message: translator.translate(`SERVER_ERROR`)
                     });
                 } else {
                     user.accessToken = token;
@@ -87,13 +114,12 @@ exports.userLogin = async (req, res) => {
             res.status(403);
             console.log(error);
             res.json({
-                message: "Authentification incorrect."
+                message: translator.translate("AUTHENTICATION_NO_CORRECT")
             });
         }
     } catch (e) {
         res.status(400).json({
-            message: "User not found."
-
+            message: translator.translate("USER_NOT_FOUND")
         });
     }
 };
@@ -300,7 +326,7 @@ exports.getUserById = async (req, res) => {
 
         if (!user) {
             res.status(404).json({
-                err: "user not found"
+                err: translator.translate(`USER_NOT_FOUND`)
             });
             return;
         }
@@ -334,9 +360,12 @@ exports.updateUserById = async (req, res) => {
         const userdb = await User.findById(id);
         if (!userdb) {
             res.status(404).json({
-                message: `user not found`
+                message: translator.translate("USER_NOT_FOUND")
             });
             return;
+        }
+        if (user.avatar){
+            userService.uploadAvatar(user);
         }
         const updated = await User.findByIdAndUpdate(id, user);
         updated.groups = groups;
@@ -386,7 +415,7 @@ exports.updateUserById = async (req, res) => {
             await grp.save();
         }
         res.json({
-            message: `user ${updated.id} updated`,
+            message: translator.translate(`USER_UPDATED`, user.id),
             user
         });
     } catch (e) {
@@ -417,7 +446,7 @@ exports.deleteUserById = async (req, res) => {
         });
         if (!user) {
             res.status(404).json({
-                err: "user not found"
+                err: translator.translate(`USER_NOT_FOUND`)
             });
             return;
         }
@@ -440,10 +469,10 @@ exports.deleteUserById = async (req, res) => {
         if (flag) {
             await user.delete();
             res.json({
-                message: `user ${user.id} deleted`
+                message: translator.translate("USER_DELETED", user.id)
             });
         } else {
-            throw new Error(`the user ${user.id} can't be deleted`);
+            throw new Error(translator.translate("USER_CAN_T_BE_DELETED", user.id));
         }
     } catch (e) {
         res.status(400).json({
@@ -480,6 +509,22 @@ exports.Logout = async (req, res) => {
 };
 
 exports.serve = (req, res) => {
+    const code = req.params.code;
+    const pathname = `${BASE_DIR}/${code}/24x24.png`;
 
+    fs.readFile(pathname, {
+        encoding: "binary"
+    }, (err, data) => {
+        if (err){
+            res.status(400).json({
+                message: "Error"
+            });
+        }
+        else {
+            res.set({
+                "Content-Type": "image/png"
+            }).end(data);
+        }
+    });
 };
 

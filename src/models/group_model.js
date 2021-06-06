@@ -1,34 +1,26 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.SchemaTypes.ObjectId;
+const translator = require("../services/translate");
 
 const groupSchema = mongoose.Schema({
     name: {
         type: String,
         unique: true,
-        required: [true, 'Groupe name is required'],
+        required: [true, translator.translate("GROUP_NAME_REQUIRED")],
         match: /[a-z]/,
-        minlength: [3, 'Group name too long !'],
+        minlength: [3, translator.translate("GROUP_NAME_TOO_LONG")],
     },
     admin: {
         type: ObjectId,
         ref: 'User',
-        required: [true, "Admin is required"]
+        required: [true, translator.translate("ADMIN_REQUIRED")]
     },
     members: [{
         type: ObjectId,
         ref: 'User',
-        required: [true, "Members is required"]
+        required: [true, translator.translate("MEMBER_REQUIRED")]
     }],
 
-
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now()
-    }
 }, {
     timestamps: {
         createdAt: 'created_at',
