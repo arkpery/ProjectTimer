@@ -3,7 +3,7 @@ const User = require("../models/user_model").Model;
 const Project = require("../models/project-model");
 const translator = require("../services/translate");
 
-exports.isMemberOfGroups = (type) => {
+exports.isMemberOf = (type) => {
     switch (type) {
         case "USER":
             return (async (req, res) => {

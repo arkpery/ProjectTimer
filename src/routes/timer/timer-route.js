@@ -1,6 +1,6 @@
 const timers = require("../../controllers/timer-controller.js");
 const Context = require("../../services/context");
-const isMemberOf = require("../../middleware/isMemberOf").isMemberOfGroups;
+const isMemberOf = require("../../middleware/isMemberOf").isMemberOf;
 const isAdminOf = require("../../middleware/isAdminOf").isAdminOf;
 const { router, id } = Context.Pull();
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
