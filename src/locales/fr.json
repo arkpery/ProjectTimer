@@ -29,5 +29,16 @@
     "USER_EMPTY": "Utilisateur invalide",
     "TIMER_EMPTY": "La tâche n'existe pas",
     "GROUP_EMPTY": "Le groupe n'existe pas",
-    "PROJECT_DELETED": "Le projet est supprimé"
+    "PROJECT_DELETED": "Le projet est supprimé",
+    "USER_REQUIRED": "Un utilisateur est requis",
+    "PASSWORD_REQUIRED": "Le mot de passe est requis",
+    "FIVE_CHARACTERS_MIN": "Trop petit, 5 caractères minimum",
+    "32_CHARACTERS_MAX": "Trop long, nombre max de 32 caractères",
+    "ADMIN_REQUIRED": "Un admin est requis",
+    "PROJECT_NAME_TOO_SHORT": "Le nom du projet est trop court !",
+    "PROJECT_TOO_LONG": "Le nom du projet est trop long !",
+    "PROJECT_NAME_REQUIRED": "Le nom du projet est requis !",
+    "GROUP_NAME_REQUIRED": "Le nom du groupe est requis !",
+    "GROUP_NAME_TOO_LONG": "Le nom du groupe est trop long !",
+    "MEMBER_REQUIRED": "Des membres sont requis"
 }

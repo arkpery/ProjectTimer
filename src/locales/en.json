@@ -29,5 +29,16 @@
     "USER_EMPTY": "User not exist",
     "TIMER_EMPTY": "Timer not exist",
     "GROUP_EMPTY": "Group not exist",
-    "PROJECT_DELETED": "The project is deleted"
+    "PROJECT_DELETED": "The project is deleted",
+    "USER_REQUIRED": "User is required",
+    "PASSWORD_REQUIRED": "Password is required",
+    "FIVE_CHARACTERS_MIN": "Too short, min is 5 characters",
+    "32_CHARACTERS_MAX": "Too long, max is 32 characters",
+    "ADMIN_REQUIRED": "Admin is required",
+    "PROJECT_NAME_TOO_SHORT": "Project name too short !",
+    "PROJECT_TOO_LONG": "Project too long !",
+    "PROJECT_NAME_REQUIRED": "Project name required !",
+    "GROUP_NAME_REQUIRED": "The group name is required !",
+    "GROUP_NAME_TOO_LONG": "Group name too long !",
+    "MEMBER_REQUIRED": "Members is required"
 }

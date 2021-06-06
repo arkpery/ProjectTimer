@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const translator = require("../services/translate");
 
 /**
  * Define project model
@@ -6,16 +7,16 @@ const mongoose = require('mongoose');
 const projectSchema = mongoose.Schema({
     name: {
         type: String,
-        required: "Le nom du projet est requis",
+        required: translator.translate("PROJECT_NAME_REQUIRED"),
         match: /[a-z]/,
-        minlength: [3, 'Project name too short !'],
-        maxlength: [20, 'Project too long !'],
+        minlength: [3, translator.translate("PROJECT_NAME_TOO_SHORT")],
+        maxlength: [20, translator.translate("PROJECT_TOO_LONG")],
     },
 
     admin: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
-        require: "Admin is required"
+        require: translator.translate("ADMIN_REQUIRED")
     },
 
     groups: [{
