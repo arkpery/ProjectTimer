@@ -4,9 +4,9 @@ const groupJwt = require('../middleware/jwtMiddleware')
 const groupServices = require('../services/groups-services')
 
 /**
- * 
+ * Function to get the list and details of all groups
  * @param {Array} req 
- * @param {*} res 
+ * @param {Array} res 
  */
 exports.getAllGroups = async (req, res) => {
     const perPage = req.query.perPage ?? 10;
@@ -29,9 +29,9 @@ exports.getAllGroups = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
+ * Function to get a group with its information by id
+ * @param {Array} req 
+ * @param {Array} res 
  * @returns 
  */
 exports.getGroupById = async (req, res) => {
@@ -63,9 +63,9 @@ exports.getGroupById = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
+ * Function to create a new group 
+ * @param {Array} req 
+ * @param {Array} res 
  */
 exports.createGroup = async (req, res) => {
     const body = req.body;
@@ -94,13 +94,12 @@ exports.createGroup = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
+ * Function to delete group by id
+ * @param {Array} req 
+ * @param {Array} res 
  * @returns 
  */
 exports.deleteGroupById = async (req, res) => {
-
     try {
 
         const groupId = req.params.id
@@ -133,9 +132,9 @@ exports.deleteGroupById = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
+ * Function to update group by id
+ * @param {Array} req 
+ * @param {Array} res 
  */
 exports.updateGroupById = async (req, res) => {
     const id = req.params.id;
@@ -159,6 +158,7 @@ exports.updateGroupById = async (req, res) => {
         const users = await User.find({
             groups: [id]
         });
+
 
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
@@ -203,7 +203,8 @@ exports.updateGroupById = async (req, res) => {
             }
         }
         res.json({
-            message: `group ${updated.name} updated`
+            message: `group ${updated.name} updated`,
+            updated
         });
     }
     catch (e) {
