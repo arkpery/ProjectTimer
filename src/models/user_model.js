@@ -33,14 +33,6 @@ const userSchema = mongoose.Schema({
         type: Schema.Types.ObjectId, ref: "Group"
     }],
 
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now()
-    }
 }, {
     timestamps: {
         createdAt: 'created_at',

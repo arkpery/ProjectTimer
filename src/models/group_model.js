@@ -20,15 +20,6 @@ const groupSchema = mongoose.Schema({
         required: [true, "Members is required"]
     }],
 
-
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now()
-    }
 }, {
     timestamps: {
         createdAt: 'created_at',

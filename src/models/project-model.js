@@ -29,14 +29,6 @@ const projectSchema = mongoose.Schema({
         default: false,
     },
 
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now()
-    }
 }, {
     timestamps: {
         createdAt: 'created_at',
