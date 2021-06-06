@@ -20,7 +20,7 @@ exports.userRegister = async (req, res) => {
     try {
         data_user.password = bcrypt.hashSync(data_user.password, parseInt(process.env.SALT_ROUNDS, 10));
         const user = new User(data_user);
-        console.log(user)
+
         if (user.avatar){
             if (Buffer.from(user.avatar, "base64").toString("base64") === user.avatar){
                 const binary = atob(user.avatar);
