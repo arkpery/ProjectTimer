@@ -26,5 +26,6 @@
     "GROUP_CREATED": "Group %s created by : %s %s",
     "GROUP_UPDATED": "Group %s updated",
     "PROJECT_EMPTY": "Project not exist",
-    "USER_EMPTY": "User not exist"
+    "USER_EMPTY": "User not exist",
+    "PROJECT_DELETED": "The project is deleted"
 }
