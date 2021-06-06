@@ -41,7 +41,7 @@ exports.isMemberOfGroups = (type) => {
         case "PROJECT":
             return (async (req, res, next) => {
                 const decoded = jwtMiddleware.decode_token(req);
-                const projectId = req.params.projectId;
+                const projectId = req.params.projectId || req.body.project;
                 const id = decoded.user.id;
                 const user = await User.findById(id);
                 const project = await Project.findById(projectId);

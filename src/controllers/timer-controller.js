@@ -90,20 +90,20 @@ exports.getTimerByUser = async (req, res) => {
 exports.updateTimer = async (req, res) => {
     try {
         try {
-            await Timer.findByIdAndUpdate(req.params.id, req.body);
-            await Timer.findById(req.params.id)
+            await Timer.findByIdAndUpdate(req.params.timerId, req.body);
+            await Timer.findById(req.params.timerId)
                 .populate('user')
                 .populate('project')
                 .exec((error, result) => {
-                    if (error) console.log(error)
+                    if (error) console.log(error);
 
-                    res.status(200).json(result)
+                    res.status(200).json(result);
                 });
         } catch (error) {
-            errorHandler(error, res)
+            errorHandler(error, res);
         }
     } catch (error) {
-        errorHandler(error, res)
+        errorHandler(error, res);
     }
 }
 
@@ -114,10 +114,10 @@ exports.updateTimer = async (req, res) => {
  */
 exports.deleteTimer = async (req, res) => {
     try {
-        const timer = req.params.timerId
-        await this.checkTimerId(timer)
+        const timer = req.params.timerId;
+        await this.checkTimerId(timer);
 
-        Timer.findByIdAndRemove({ _id: req.params.id }, (error) => {
+        Timer.findByIdAndRemove({ _id: timer }, (error) => {
             res.status(200).json({ "message": translator.translate("TIMER_REMOVED_SUCCESSFULLY") })
             if (error) console.log(error)
         });

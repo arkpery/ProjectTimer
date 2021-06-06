@@ -6,7 +6,7 @@ const { router, id } = Context.Pull();
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
 
 // Create a new Timer
-router.post('/timers', [jwtMiddleware.verify_token, isAdminOf()], timers.setTimer);
+router.post('/timers', [jwtMiddleware.verify_token, isMemberOf("PROJECT")], timers.setTimer);
 
 // Get Timer by Project 
 router.get('/timers/project/:projectId', [jwtMiddleware.verify_token, isMemberOf("PROJECT")], timers.getTimerByProject);
@@ -15,10 +15,10 @@ router.get('/timers/project/:projectId', [jwtMiddleware.verify_token, isMemberOf
 router.get('/timers/user/:userId', [jwtMiddleware.verify_token, isMemberOf("USER")], timers.getTimerByUser);
 
 // Update a Timer by Id
-router.put('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf()], timers.updateTimer);
+router.put('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf("TIMER")], timers.updateTimer);
 
 // Delete a Timer by timerId
-router.delete('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf()], timers.deleteTimer);
+router.delete('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf("TIMER")], timers.deleteTimer);
 
 // Start timer
 router.post("/timers/:projectId/start", [jwtMiddleware.verify_token, isMemberOf("PROJECT")], timers.startTimer);
