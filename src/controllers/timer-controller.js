@@ -16,7 +16,6 @@ const timersService = require("../services/timers-services");
 exports.setTimer = async (req, res) => {
     try {
         const t = req.body;
-        t.project = req.params.project_id;
         const timer = new Timer(t);
 
         await timer.save(async (error, created) => {
@@ -41,7 +40,7 @@ exports.setTimer = async (req, res) => {
  */
 exports.getTimerByProject = async (req, res) => {
     try {
-        const project = req.params.timerId
+        const project = req.params.projectId;
         await projectService.checkValidProjectId(project)
 
         Timer.find({ project: project })
@@ -65,7 +64,7 @@ exports.getTimerByProject = async (req, res) => {
  */
 exports.getTimerByUser = async (req, res) => {
     try {
-        const user = req.params.timerId
+        const user = req.params.userId;
         await userService.checkValidUserId(user)
 
         Timer.find({ user: user })
@@ -119,7 +118,6 @@ exports.deleteTimer = async (req, res) => {
         await this.checkTimerId(timer)
 
         Timer.findByIdAndRemove({ _id: req.params.id }, (error) => {
-
             res.status(200).json({ "message": translator.translate("TIMER_REMOVED_SUCCESSFULLY") })
             if (error) console.log(error)
         });
@@ -141,7 +139,6 @@ exports.checkTimerId = async (id) => {
         const exist = await Timer.exists({ _id: id })
         if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
     }
-
     return true
 }
 
@@ -149,7 +146,6 @@ exports.checkTimerId = async (id) => {
 exports.startTimer = async (req, res) => {
     try {
         await timersService.canStart(req.params.projectId);
-
         const t = req.body;
         t.startTime = Date.now();
         t.duration = 0;
@@ -173,7 +169,6 @@ exports.startTimer = async (req, res) => {
 exports.stopTimer = async (req, res) => {
     try {
         await timersService.canStop(req.params.projectId);
-
         const timer = await Timer.findById(req.params.id);
         timer.duration = Date.now() - timer.startTime;
         await Timer.findByIdAndUpdate(req.params.id, timer);

@@ -24,5 +24,7 @@
     "SERVER_ERROR": "Erreur serveur",
     "AUTHENTICATION_NO_CORRECT": "Authentication incorrect",
     "GROUP_CREATED": "Groupe %s créée par : %s %s",
-    "GROUP_UPDATED": "Groupe %s mis à jour"
+    "GROUP_UPDATED": "Groupe %s mis à jour",
+    "PROJECT_EMPTY": "Le projet n'existe pas",
+    "USER_EMPTY": "Utilisateur invalide"
 }

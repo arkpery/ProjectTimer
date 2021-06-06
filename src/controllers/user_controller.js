@@ -19,12 +19,31 @@ exports.userRegister = async (req, res) => {
         const user = new User(data_user);
         console.log(user)
         await user.save();
-        res.json({
-            data: {
-                "_id": user.id,
-                "email": user.email
-            },
-            message: translator.translate(`USER_CREATED`, user.email)
+        jwt.sign({
+            user: {
+                id: user._id,
+                email: user.email
+            }
+        }, process.env.JWT_KEY, {
+            expiresIn: "30 days"
+        }, (error, token) => {
+            if (error) {
+                res.status(400);
+                console.log(error);
+                res.json({
+                    message: translator.translate(`SERVER_ERROR`)
+                });
+            } else {
+                res.status(200);
+                res.json({
+                    "token": token,
+                    user: {
+                        id: user._id,
+                        email: user.email
+                    },
+                    message: translator.translate(`USER_CREATED`, user.email)
+                });
+            }
         });
     } catch (e) {
         res.status(400).json({
