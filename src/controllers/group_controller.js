@@ -71,11 +71,12 @@ exports.getGroupById = async (req, res) => {
 exports.createGroup = async (req, res) => {
     const body = req.body;
     const group = new Group(body);
+    const decoded = groupJwt.decode_token(req);
 
+    group.admin = decoded.user.id;
     try {
         const saved = await group.save();
-        const admin = saved.admin;
-        const user = await User.findById(admin);
+        const user = await User.findById(decoded.user.id);
 
         user.groups.push(saved);
         await user.save();
