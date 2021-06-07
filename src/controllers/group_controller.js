@@ -36,8 +36,7 @@ exports.getAllGroups = async (req, res) => {
  * @returns 
  */
 exports.getGroupById = async (req, res) => {
-    const id = req.params.id;
-
+    const id = req.params.groupId;
     try {
         const group = await Group.findById(id).populate({
             path: "admin",
@@ -104,7 +103,7 @@ exports.createGroup = async (req, res) => {
 exports.deleteGroupById = async (req, res) => {
     try {
 
-        const groupId = req.params.id
+        const groupId = req.params.groupId
         const decoded = await groupJwt.decode_token(req)
         await groupServices.checkIfAdmin(groupId, decoded.user.id)
 
@@ -139,7 +138,7 @@ exports.deleteGroupById = async (req, res) => {
  * @param {Array} res 
  */
 exports.updateGroupById = async (req, res) => {
-    const id = req.params.id;
+    const id = req.params.groupId;
     const decoded = await groupJwt.decode_token(req)
     await groupServices.checkIfAdmin(id, decoded.user.id)
 
@@ -206,7 +205,7 @@ exports.updateGroupById = async (req, res) => {
         }
         res.json({
             message: translator.translate("GROUP_UPDATED", updated.name),
-            updated
+            group
         });
     }
     catch (e) {

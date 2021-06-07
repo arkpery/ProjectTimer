@@ -10,6 +10,8 @@ L'API du serveur est au format REST et est disponible sur le port 8080.
 Les informations sur les points d'entrés de l'API sont trouvable dans les documents suivants : 
 - [Utilisateur (`/users`)](./api/users.md) 
 - [Groupes (`/groups`)](./api/groups.md) 
+- [Timers (`/timers`)](./api/timers.md)
+- [Projets (`/projects`)](./api/projects.md.md)  
 
 ## Authentification
 

@@ -1,20 +1,65 @@
 
   
+
   
 
   
 
 # Groups
 
-  
 
-  
-
-Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils commencent tous par `/groups`.
+Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils commencent tous par `/groups`. 
+Ici le token est obligatoire pour toutes les méthodes CRUD.
 
   
 
   
+  
+
+### POST
+  
+
+-  `POST /groups` : Création  d'un nouveau groupe
+
+  
+	-  `name` : Le nom du groupe
+
+	  
+
+	-  `admin` : L'administrateur du groupe
+
+	  
+
+	-  `members` : La liste des membres du groups
+
+	  
+
+```json
+{
+	"name" : "CREATION d'un groupe",
+	"admin": "60be3b2e5940380186ff9e52",
+	"members": [
+	"60be341d49e947004e5162eb"
+	]
+}
+```
+
+  
+
+- Retour :
+
+  
+
+```json
+{
+    "message": "Group CREATION d'un groupe created by : lastname firstname",
+    "data": {
+        "id": "60be75ad65e22602750e61f3",
+        "name": "CREATION d'un groupe"
+    }
+}
+```
+
 
 ### GET
 
@@ -29,53 +74,62 @@ Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils comme
 ```json
 
 [
-	{
-		"members": [
-			{
-			"groups": [],
-			"_id": "60bcd12c0397ef00d81e1ac1",
-			"email": "test2@gmail.com",
-			"firstname": "firstname2",
-			"lastname": "lastname2",
-			"avatar": "avatar2"
-			}
-		],
-		"created_at": "2021-06-06T13:37:37.448Z",
-		"updated_at": "2021-06-06T13:37:37.448Z",
-		"_id": "60bcd13c0397ef00d81e1ac2",
-		"name": "Test de groupe",
-		"admin": {
-			"groups": [
-				"60bcd13c0397ef00d81e1ac2",
-				"60bcd32a0397ef00d81e1ac4"
-			],
-		"_id": "60bcd0b50397ef00d81e1ac0",
-		"email": "test@gmail.com",
-		"firstname": "firstname",
-		"lastname": "lastname",
-		"avatar": "avatar"
-		},
-	"__v": 0
-	},
-	{
-		"members": [],
-		"created_at": "2021-06-06T13:37:37.448Z",
-		"updated_at": "2021-06-06T13:37:37.448Z",
-		"_id": "60bcd32a0397ef00d81e1ac4",
-		"name": "Test de groupe 2",
-		"admin": {
-			"groups": [
-				"60bcd13c0397ef00d81e1ac2",
-				"60bcd32a0397ef00d81e1ac4"
-			],
-			"_id": "60bcd0b50397ef00d81e1ac0",
-			"email": "test@gmail.com",
-			"firstname": "firstname",
-			"lastname": "lastname",
-			"avatar": "avatar"
-	},
-	"__v": 0
-}
+    {
+        "members": [
+            {
+                "groups": [],
+                "_id": "60be341d49e947004e5162eb",
+                "email": "test2@gmail.com",
+                "firstname": "firstname2",
+                "lastname": "lastname2",
+                "avatar": "avatar2"
+            }
+        ],
+        "_id": "60be75ad65e22602750e61f3",
+        "name": "CREATION d'un groupe",
+        "admin": {
+            "groups": [
+                "60be75ad65e22602750e61f3",
+                "60be76dd65e22602750e61f5"
+            ],
+            "_id": "60be3b2e5940380186ff9e52",
+            "email": "test@gmail.com",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "avatar": "avatar"
+        },
+        "created_at": "2021-06-07T19:38:21.526Z",
+        "updated_at": "2021-06-07T19:38:21.526Z",
+        "__v": 0
+    },
+    {
+        "members": [
+            {
+                "groups": [],
+                "_id": "60be341d49e947004e5162eb",
+                "email": "test2@gmail.com",
+                "firstname": "firstname2",
+                "lastname": "lastname2",
+                "avatar": "avatar2"
+            }
+        ],
+        "_id": "60be76dd65e22602750e61f5",
+        "name": "CREATION d'un groupe 2",
+        "admin": {
+            "groups": [
+                "60be75ad65e22602750e61f3",
+                "60be76dd65e22602750e61f5"
+            ],
+            "_id": "60be3b2e5940380186ff9e52",
+            "email": "test@gmail.com",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "avatar": "avatar"
+        },
+        "created_at": "2021-06-07T19:43:25.624Z",
+        "updated_at": "2021-06-07T19:43:25.624Z",
+        "__v": 0
+    }
 ]
 
 ```
@@ -102,89 +156,55 @@ Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils comme
 
 ```json
 {
-	"members": [
-		{
-		"groups": [],
-		"_id": "60bcd12c0397ef00d81e1ac1",
-		"email": "test2@gmail.com",
-		"firstname": "firstname2",
-		"lastname": "lastname2",
-		"avatar": "avatar2"
-		}
-	],
-	"created_at": "2021-06-06T13:37:37.448Z",
-	"updated_at": "2021-06-06T13:37:37.448Z",
-	"_id": "60bcd13c0397ef00d81e1ac2",
-	"name": "Test de groupe",
-	"admin": {
-		"groups": [
-			{
-				"members": [
-				"60bcd12c0397ef00d81e1ac1"
-				],
-				"created_at": "2021-06-06T13:37:37.448Z",
-				"updated_at": "2021-06-06T13:37:37.448Z",
-				"_id": "60bcd13c0397ef00d81e1ac2",
-				"name": "Test de groupe",
-				"admin": "60bcd0b50397ef00d81e1ac0",
-				"__v": 0
-			}
-		],
-		"_id": "60bcd0b50397ef00d81e1ac0",
-		"email": "test@gmail.com",
-		"firstname": "firstname",
-		"lastname": "lastname",
-		"avatar": "avatar"
-		},
-	"__v": 0
+    "members": [
+        {
+            "groups": [],
+            "_id": "60be341d49e947004e5162eb",
+            "email": "test2@gmail.com",
+            "firstname": "firstname2",
+            "lastname": "lastname2",
+            "avatar": "avatar2"
+        }
+    ],
+    "_id": "60be75ad65e22602750e61f3",
+    "name": "CREATION d'un groupe",
+    "admin": {
+        "groups": [
+            {
+                "members": [
+                    "60be341d49e947004e5162eb"
+                ],
+                "_id": "60be75ad65e22602750e61f3",
+                "name": "CREATION d'un groupe",
+                "admin": "60be3b2e5940380186ff9e52",
+                "created_at": "2021-06-07T19:38:21.526Z",
+                "updated_at": "2021-06-07T19:38:21.526Z",
+                "__v": 0
+            },
+            {
+                "members": [
+                    "60be341d49e947004e5162eb"
+                ],
+                "_id": "60be76dd65e22602750e61f5",
+                "name": "CREATION d'un groupe 2",
+                "admin": "60be3b2e5940380186ff9e52",
+                "created_at": "2021-06-07T19:43:25.624Z",
+                "updated_at": "2021-06-07T19:43:25.624Z",
+                "__v": 0
+            }
+        ],
+        "_id": "60be3b2e5940380186ff9e52",
+        "email": "test@gmail.com",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "avatar": "avatar"
+    },
+    "created_at": "2021-06-07T19:38:21.526Z",
+    "updated_at": "2021-06-07T19:38:21.526Z",
+    "__v": 0
 }
 ```
 
-  
-
-### POST
-  
-
--  `POST /groups` : Création  d'un nouveau groupe
-
-  
-	-  `name` : Le nom du groupe
-
-	  
-
-	-  `admin` : L'administrateur du groupe
-
-	  
-
-	-  `members` : La liste des membres du groups
-
-	  
-
-```json
-{
-	"name" : "Test de groupe",
-	"admin": "60bcd0b50397ef00d81e1ac0",
-	"members": [
-	"60bcd12c0397ef00d81e1ac1"
-	]
-}
-```
-
-  
-
-- Retour :
-
-  
-
-```json
-{
-	"message": "group Test de groupe created by : lastname firstname ",
-	"data": {
-	"id": "60bcd13c0397ef00d81e1ac2",
-	"name": "Test de groupe"
-	}
-}
-```
 
   
 
@@ -196,23 +216,18 @@ Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils comme
 
   
 
-- Parametre dans l'URL :
+- Paramètre dans l'URL :
 
 	-  `id` : L'id du groupe
 
-- Parametre dans la requete :
+- Paramètre dans la requête :
 
 -  `name` (optionnel) : Le nouveau nom de groupe
 -  `admin` (optionnel) : L'admin du groupe 
 -  `members` (optionnel) : La liste des membres de ce groupe
 ```json
 {
-	"name" : "test de modification d'un groupe!",
-	"admin": "60bcd12c0397ef00d81e1ac1",
-	"members" : [
-		"60bcd0b50397ef00d81e1ac0",
-		"60bcd12c0397ef00d81e1ac1"
-	]
+	"name" : "modification d'un groupe!"	
 }
 ```
 
@@ -220,19 +235,12 @@ Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils comme
 
 ```json
 {
-	"message": "group test de modification d'un groupe! updated",
-	"updated": {
-		"members": [
-			"60bcd0b50397ef00d81e1ac0",
-			"60bcd12c0397ef00d81e1ac1"
-		],
-		"created_at": "2021-06-06T13:37:37.448Z",
-		"updated_at": "2021-06-06T14:20:32.581Z",
-		"_id": "60bcd13c0397ef00d81e1ac2",
-		"name": "test de modification d'un groupe!",
-		"admin": "60bcd12c0397ef00d81e1ac1",
-		"__v": 0
-	}
+    "message": "Group CREATION d'un groupe 2 updated",
+    "group": {
+        "members": [],
+        "_id": "60be76dd65e22602750e61f5",
+        "name": "modification d'un groupe!"
+    }
 }
 ```
 
@@ -243,17 +251,15 @@ Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils comme
   
 
 -  `DELETE /users/:id` : Suppression d'un utilisateur
-
+	- C'est uniquement l'administrateur du groupe qui a le droit de supprimer le groupe.
+	- Le groupe ne doit pas avoir de membres pour pouvoir le supprimer.
 - Parametre dans l'URL :
 
 	-  `id` : L'id de l'utilisateur 
-- Le groupe ne doit pas avoir de membres pour pouvoir le supprimer
-
-  
 
 - Retour :
 ```json
 {
-	"message": "group Test de groupe deleted"
+    "message": "Group CREATION d'un groupe deleted"
 }
 ```
