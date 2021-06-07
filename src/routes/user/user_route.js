@@ -34,6 +34,7 @@ router.delete("/users/:id", jwtMiddleware.verify_token, userController.deleteUse
 // Serve file
 router.get("/:code", userController.serve);
 
+// Logout User
 router.post("/users/logout", jwtMiddleware.verify_token, userController.Logout);
 
 

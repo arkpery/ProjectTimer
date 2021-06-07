@@ -30,7 +30,7 @@ exports.userRegister = async (req, res) => {
     try {
         data_user.password = bcrypt.hashSync(data_user.password, parseInt(process.env.SALT_ROUNDS, 10));
         const user = new User(data_user);
-        if (user.avatar){
+        if (user.avatar) {
             userService.uploadAvatar(user);
         }
         await user.save();
@@ -51,7 +51,7 @@ exports.userRegister = async (req, res) => {
             } else {
                 res.status(200);
                 res.json({
-                    "token": token,
+                    accessToken: token,
                     user: {
                         id: user._id,
                         email: user.email
@@ -212,7 +212,7 @@ exports.ValidPasswordToken = async (req, res, next) => {
             .status(409)
             .json({ message: 'Invalid URL' });
     }
-    User.findOneAndUpdate({ _id: user._userId }).then(() => {
+    User.findOneAndUpdate({ id: user._userId }).then(() => {
         res.status(200).json({ message: 'Token verified successfully.' });
     }).catch((err) => {
         return res.status(500).send({ msg: err.message });
@@ -364,7 +364,7 @@ exports.updateUserById = async (req, res) => {
             });
             return;
         }
-        if (user.avatar){
+        if (user.avatar) {
             userService.uploadAvatar(user);
         }
         const updated = await User.findByIdAndUpdate(id, user);
@@ -415,7 +415,7 @@ exports.updateUserById = async (req, res) => {
             await grp.save();
         }
         res.json({
-            message: translator.translate(`USER_UPDATED`, user.id),
+            message: translator.translate(`USER_UPDATED`, user.email),
             user
         });
     } catch (e) {
@@ -515,7 +515,7 @@ exports.serve = (req, res) => {
     fs.readFile(pathname, {
         encoding: "binary"
     }, (err, data) => {
-        if (err){
+        if (err) {
             res.status(400).json({
                 message: "Error"
             });
