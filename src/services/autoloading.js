@@ -25,7 +25,7 @@ function RegisterRoutes(app){
 
         Push({
             id: new Date().getTime().toString(35),
-            router:router
+            router: router
         });
         require(route);
         app.use(router);
