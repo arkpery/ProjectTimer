@@ -65,8 +65,6 @@ exports.getTimerByProject = async (req, res) => {
  */
 exports.getTimerByUser = async (req, res) => {
     try {
-        console.log("****")
-        console.log(req.params)
         const user = req.params.userId;
         await userService.checkValidUserId(user)
 

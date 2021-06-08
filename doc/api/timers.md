@@ -1,8 +1,20 @@
 
+  
+
+  
+
+  
+
 # Timers
+
 
 Liste de tous  les points d'entrée lié à la gestion d'un timer, ils commencent tous par `/timers`. 
 Ici le token est obligatoire pour toutes les méthodes CRUD.
+
+  
+
+  
+  
 
 ### POST
 
@@ -159,7 +171,46 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
   
 
 		-  `userId : L'id de l'utilisateur
-  
+  ```json
+  [
+    {
+        "startTime": "2021-06-08T16:08:37.463Z",
+        "_id": "60bf96260c467803e6080af6",
+        "description": "description de la tache",
+        "taskType": "tache 1",
+        "user": {
+            "_id": "60bf888637d8d6002cfcb69f",
+            "email": "test@gmail.com"
+        },
+        "project": {
+            "_id": "60bf927c36f6cf030059aec7",
+            "name": "Projet NodeSs"
+        },
+        "duration": 0,
+        "created_at": "2021-06-08T16:09:10.672Z",
+        "updated_at": "2021-06-08T16:09:10.672Z",
+        "__v": 0
+    },
+    {
+        "startTime": "2021-06-08T16:08:37.463Z",
+        "_id": "60bf96b30c467803e6080af9",
+        "description": "description de la tache 2",
+        "taskType": "tache 2",
+        "user": {
+            "_id": "60bf888637d8d6002cfcb69f",
+            "email": "test@gmail.com"
+        },
+        "project": {
+            "_id": "60bf96820c467803e6080af7",
+            "name": "Projet NodeJS PMN"
+        },
+        "duration": 0,
+        "created_at": "2021-06-08T16:11:31.022Z",
+        "updated_at": "2021-06-08T16:11:31.022Z",
+        "__v": 0
+    }
+]
+  ```
 
 -  `GET /groups/:id` : Retourne les informations d'un projet
 

@@ -17,7 +17,6 @@ const translator = require("../services/translate");
 exports.createProject = async (req, res) => {
     try {
         await projectServices.verifData(req)
-        const decoded = projectJwt.decode_token(req);
         // Create a Project
         const newProject = new Project(
             {

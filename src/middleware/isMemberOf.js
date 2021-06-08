@@ -6,7 +6,7 @@ const translator = require("../services/translate");
 exports.isMemberOf = (type) => {
     switch (type) {
         case "USER":
-            return (async (req, res) => {
+            return (async (req, res, next) => {
                 const decoded = jwtMiddleware.decode_token(req);
                 const userId = req.params.userId;
                 const id = decoded.user.id;
@@ -29,10 +29,8 @@ exports.isMemberOf = (type) => {
                 const groups2 = user2.groups;
                 for (let i = 0; i < groups1.length; i++) {
                     const g1 = groups1[i];
-
                     if (groups2.indexOf(g1) > -1) {
-                        next();
-                        return;
+                        return next();
                     }
                 }
                 res.status(403).end();
@@ -64,8 +62,7 @@ exports.isMemberOf = (type) => {
                     const g1 = groups1[i];
 
                     if (groups2.indexOf(g1) > -1) {
-                        next();
-                        return;
+                        return next();
                     }
                 }
                 res.status(403).end();
