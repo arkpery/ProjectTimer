@@ -18,7 +18,7 @@ exports.setTimer = async (req, res) => {
         const t = req.body;
         t.duration = 0;
         const timer = new Timer(t);
-
+        console.log(timer)
         await timer.save(async (error, created) => {
             if (error) console.log(error)
             await created.populate({
@@ -174,13 +174,13 @@ exports.stopTimer = async (req, res) => {
         timer.duration = Date.now() - timer.startTime;
         await Timer.findByIdAndUpdate(req.params.id, timer);
         await Timer.findById(req.params.id)
-        .populate('user')
-        .populate('project')
-        .exec((error, result) => {
-            if (error) console.log(error);
+            .populate('user')
+            .populate('project')
+            .exec((error, result) => {
+                if (error) console.log(error);
 
-            res.status(200).json(result);
-        });
+                res.status(200).json(result);
+            });
     } catch (error) {
         errorHandler(error, res);
     }

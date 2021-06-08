@@ -8,7 +8,7 @@
 # Groups
 
 
-Liste de tous les les points d'entrée lié à la gestion d'un groupe, ils commencent tous par `/groups`. 
+Liste de tous  les points d'entrée lié à la gestion d'un groupe, ils commencent tous par `/groups`. 
 Ici le token est obligatoire pour toutes les méthodes CRUD.
 
   

@@ -24,7 +24,7 @@ exports.createProject = async (req, res) => {
                 _id: mongoose.Types.ObjectId(),
                 name: req.body.name,
                 groups: req.body.groups,
-                admin: decoded.user.id,
+                admin: req.body.admin,
                 timers: [],
                 close: req.body.close,
             });
@@ -79,10 +79,8 @@ exports.getProjectById = async (req, res) => {
         const project = req.params.projectId
         await projectServices.checkValidProjectId(project)
 
-        const fieldsFilter = {
-            _id: project
-        }
-        await Project.findById(fieldsFilter)
+
+        await Project.findById(project)
             .populate('groups', ['name', 'admin', 'members'])
             .populate('admin', ['email', 'firstName', 'lastName'])
             .exec((error, result) => {

@@ -10,7 +10,7 @@ const projectSchema = mongoose.Schema({
         required: translator.translate("PROJECT_NAME_REQUIRED"),
         match: /[a-z]/,
         minlength: [3, translator.translate("PROJECT_NAME_TOO_SHORT")],
-        maxlength: [20, translator.translate("PROJECT_TOO_LONG")],
+        maxlength: [40, translator.translate("PROJECT_TOO_LONG")],
     },
 
     admin: {
