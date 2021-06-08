@@ -287,8 +287,10 @@ exports.listAllUsers = async (req, res) => {
             limit: perPage
         }).populate([{
             path: "groups",
+            select: 'name admin members',
             populate: {
-                path: "admin"
+                path: "admin",
+                select: 'email firstName lastName',
             }
         }]);
 

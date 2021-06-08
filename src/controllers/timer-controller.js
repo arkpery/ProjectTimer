@@ -18,11 +18,11 @@ exports.setTimer = async (req, res) => {
         const t = req.body;
         t.duration = 0;
         const timer = new Timer(t);
-        console.log(timer)
         await timer.save(async (error, created) => {
             if (error) console.log(error)
             await created.populate({
                 path: "user",
+                select: 'groups email firstname',
             }).populate('project').execPopulate();
             return res.status(200).json({
                 message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
@@ -65,6 +65,8 @@ exports.getTimerByProject = async (req, res) => {
  */
 exports.getTimerByUser = async (req, res) => {
     try {
+        console.log("****")
+        console.log(req.params)
         const user = req.params.userId;
         await userService.checkValidUserId(user)
 
@@ -81,8 +83,6 @@ exports.getTimerByUser = async (req, res) => {
     }
 }
 
-
-
 /**
  * 
  * @param {*} req 
@@ -93,7 +93,7 @@ exports.updateTimer = async (req, res) => {
         try {
             await Timer.findByIdAndUpdate(req.params.timerId, req.body);
             await Timer.findById(req.params.timerId)
-                .populate('user')
+                .populate('user', ['groups', 'email', 'firstName', 'lastName'])
                 .populate('project')
                 .exec((error, result) => {
                     if (error) console.log(error);
@@ -179,7 +179,10 @@ exports.stopTimer = async (req, res) => {
             .exec((error, result) => {
                 if (error) console.log(error);
 
-                res.status(200).json(result);
+                res.status(200).json({
+                    message: translator.translate("TIMER_STOPPED_SUCCESSFULLY"),
+                    result
+                });
             });
     } catch (error) {
         errorHandler(error, res);

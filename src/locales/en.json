@@ -4,6 +4,7 @@
     "PLEASE_INSERT_GROUP": "Please insert a group",
     "PLEASE_PROJECT_CLOSED": "Please set if the project is closed or no (set the \"close\" field to true for yes or false for no )",
     "TIMER_CREATED_SUCCESSFULLY": "timer created successfully",
+    "TIMER_STOPPED_SUCCESSFULLY": "timer stopped successfully",
     "TIMER_REMOVED_SUCCESSFULLY": "timer successfully removed",
     "ID_NOT_VALID": "This id isn't valid : ",
     "ID_NOT_EXIST": "This id don't exist ",
