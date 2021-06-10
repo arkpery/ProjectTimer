@@ -250,12 +250,12 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
 
   
 
--  `DELETE /users/:id` : Suppression d'un utilisateur
+-  `DELETE /groups/:id` : Suppression d'un groupe
 	- C'est uniquement l'administrateur du groupe qui a le droit de supprimer le groupe.
 	- Le groupe ne doit pas avoir de membres pour pouvoir le supprimer.
 - Parametre dans l'URL :
 
-	-  `id` : L'id de l'utilisateur 
+	-  `id` : L'id de groupe 
 
 - Retour :
 ```json
