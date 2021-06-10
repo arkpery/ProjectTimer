@@ -155,7 +155,7 @@ exports.startTimer = async (req, res) => {
             await created.populate({
                 path: "project",
             }).populate('user').execPopulate();
-            return res.status(200).json({
+            return res.status(201).json({
                 message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
                 created
             });

@@ -1,6 +1,7 @@
 {
     "GROUP_DUPLICATED_LIST": "There is duplicated values in the group list provided",
     "GROUP_ADMINISTRATOR": "You must be an administrator of this group to perform this operation",
+    "PROJECT_ADMINISTRATOR": "You must be an administrator",
     "PLEASE_INSERT_GROUP": "Please insert a group",
     "PLEASE_PROJECT_CLOSED": "Please set if the project is closed or no (set the \"close\" field to true for yes or false for no )",
     "TIMER_CREATED_SUCCESSFULLY": "timer created successfully",

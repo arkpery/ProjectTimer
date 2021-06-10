@@ -1,6 +1,7 @@
 {
     "GROUP_DUPLICATED_LIST": "Il y a des valeurs dupliqués",
     "GROUP_ADMINISTRATOR": "Vous devez être un administrateur",
+    "PROJECT_ADMINISTRATOR": "Vous devez être un administrateur",
     "PLEASE_INSERT_GROUP": "S'il vous plait, insérer un groupe",
     "PLEASE_PROJECT_CLOSED": "S'il vous plait, modifier si le projet est clos ou non",
     "TIMER_CREATED_SUCCESSFULLY": "Tâche créée",

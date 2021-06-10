@@ -5,7 +5,9 @@ const Timer = require('../models/timer-model.js');
 const User = require('../models/user_model');
 const projectServices = require('../services/projects-service')
 const projectJwt = require('../middleware/jwtMiddleware')
-const { errorHandler } = require('../middleware/errorsHandler')
+const {
+    errorHandler
+} = require('../middleware/errorsHandler')
 const translator = require("../services/translate");
 
 
@@ -20,31 +22,26 @@ exports.createProject = async (req, res) => {
     try {
         await projectServices.verifData(req)
         // Create a Project
-        const newProject = new Project(
-            {
-                _id: mongoose.Types.ObjectId(),
-                name: req.body.name,
-                groups: req.body.groups,
-                admin: decoded.user.id,
-                timers: [],
-                close: req.body.close,
-            });
-
-        newProject.save(async (error, created) => {
-            if (error) console.log(error)
-            await created.populate({
-                path: "groups",
-                select: 'name admin members',
-                populate: {
-                    path: "members",
-                    select: 'email firstname lastname groups avatar',
-                },
-            }).populate('admin', ['email', 'firstname', 'lastname']).execPopulate();
-            return res.status(200).json({
-                message: translator.translate("PROJECT_CREATED_SUCCESSFULLY"),
-                created
-            })
+        const newProject = new Project({
+            _id: mongoose.Types.ObjectId(),
+            name: req.body.name,
+            groups: req.body.groups,
+            admin: decoded.user.id,
+            timers: [],
+            close: req.body.close,
         });
+
+        const created = await newProject.save();
+        await created.populate({
+            path: "groups",
+            populate: {
+                path: "members"
+            },
+        }).populate('admin', ['email', 'firstname', 'lastname']).execPopulate();
+        return res.status(201).json({
+            message: translator.translate("PROJECT_CREATED_SUCCESSFULLY"),
+            created
+        })
     } catch (error) {
         errorHandler(error, res);
     }
@@ -58,8 +55,8 @@ exports.createProject = async (req, res) => {
 exports.getAllProjects = async (req, res) => {
     try {
         await Project.find({})
-            .populate('groups', ['name', 'admin', 'members'])
-            .populate('admin', ['email', 'firstName', 'lastName'])
+            .populate('groups', ['_id', 'name', 'admin', 'members'])
+            .populate('admin', ["_id", 'email', 'firstName', 'lastName'])
             .exec((error, result) => {
                 if (error) console.log(error)
                 res.status(200).json(result);
@@ -112,7 +109,8 @@ exports.getProjectById = async (req, res) => {
 exports.updateProject = async (req, res) => {
 
     try {
-        await projectServices.verifData(req)
+        await projectServices.verifData(req);
+        await projectServices.verifyAdmin(req);
         const decoded = projectJwt.decode_token(req);
 
         const update = {
@@ -127,7 +125,9 @@ exports.updateProject = async (req, res) => {
             _id: req.params.projectId
         }
 
-        Project.findOneAndUpdate(fieldsFilter, update, { new: true }, async (error, updated) => {
+        Project.findOneAndUpdate(fieldsFilter, update, {
+            new: true
+        }, async (error, updated) => {
             if (error) console.log(error)
             await updated.populate('groups', ['name', 'admin', 'members']).execPopulate()
             await updated.populate('admin', ['email', 'firstName', 'lastName']).execPopulate()
@@ -150,9 +150,13 @@ exports.deleteProject = async (req, res) => {
         const decoded = await projectJwt.decode_token(req)
         await projectServices.checkIfAdmin(project, decoded.user.id)
 
-        Project.deleteOne({ _id: project }, (error) => {
+        Project.deleteOne({
+            _id: project
+        }, (error) => {
             if (error) console.log(error)
-            res.status(200).json({ message: translator.translate("PROJECT_DELETED", project) })
+            res.status(200).json({
+                message: translator.translate("PROJECT_DELETED", project)
+            })
         })
 
     } catch (error) {

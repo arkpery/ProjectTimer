@@ -8,7 +8,7 @@ const projectSchema = mongoose.Schema({
     name: {
         type: String,
         required: translator.translate("PROJECT_NAME_REQUIRED"),
-        match: /[a-z]/,
+        match: /[a-zA-Z0-9\_\-\ ]/,
         minlength: [3, translator.translate("PROJECT_NAME_TOO_SHORT")],
         maxlength: [40, translator.translate("PROJECT_TOO_LONG")],
     },

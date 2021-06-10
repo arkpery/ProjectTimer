@@ -17,27 +17,15 @@ exports.verifData = async (req) => {
     const groups = req.body.groups
     if (!groups) throw new AppError(translator.translate("PLEASE_INSERT_GROUP"))
     await groupServices.checkListGroups(groups)
-
     const project = req.params.projectId
     const name = req.body.name
     const close = req.body.close
-    console.log(project)
-    const admin = req.body.admin
-    if (admin) {
-        await userServices.checkValidUserId(admin)
-    } else {
-        const adm = await Project.findById(project);
-
-        console.log(adm)
-    }
 
     if (close === undefined) throw new AppError(translator.translate("PLEASE_PROJECT_CLOSED"));
 
     let nameUsed
 
     if (project) {
-        const decoded = await projectJwt.decode_token(req)
-        await this.checkIfAdmin(project, decoded.user.id)
         nameUsed = await Project.exists({ _id: { $nin: project }, name: name.trim() })
     } else {
         nameUsed = await Project.exists({ name: name })
@@ -52,12 +40,11 @@ exports.verifData = async (req) => {
  * @return true
  */
 exports.checkValidProjectId = async (id) => {
-    console.log(id);
     if (!isValidId(id)) {
         throw new AppError(`${translator.translate("ID_NOT_VALID")}`, 400)
     } else {
         const exist = await Project.exists({ _id: id })
-        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")}`, 400)
+        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
     }
 
     return true
@@ -82,7 +69,13 @@ exports.checkIfAdmin = async (project, user) => {
     }
 
     const isAdmin = await Project.exists(fieldsFilter)
-    if (!isAdmin) throw new AppError(translator.translate("GROUP_ADMINISTRATOR"));
+    if (!isAdmin) throw new AppError(translator.translate("PROJECT_ADMINISTRATOR"));
 
     return true
-}
+};
+
+exports.verifyAdmin = async (req) => {
+    const decoded = projectJwt.decode_token(req);
+
+    await this.checkIfAdmin(req.params.projectId, decoded.user.id);
+};

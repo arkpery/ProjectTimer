@@ -5,6 +5,7 @@ const Group = require("../models/group_model").Model;
 const Timer = require("../models/timer-model");
 const translator = require("../services/translate");
 const isValidParamsId = require("./isValidParamsId");
+const AppError = require("../errors/app-errors");
 
 exports.isAdminOf = (type) => {
     switch (type) {
@@ -24,6 +25,9 @@ exports.isAdminOf = (type) => {
                         throw new AppError(translator.translate("PROJECT_EMPTY"), 404);
                     } else if (project.admin.toString() === id.toString()) {
                         return next();
+                    }
+                    else {
+                        throw new AppError(translator.translate("PROJECT_ADMINISTRATOR"), 403);
                     }
                 }
                 catch (e){

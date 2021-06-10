@@ -49,7 +49,7 @@ exports.userRegister = async (req, res) => {
                     message: translator.translate(`SERVER_ERROR`)
                 });
             } else {
-                res.status(200);
+                res.status(201);
                 res.json({
                     accessToken: token,
                     user: {

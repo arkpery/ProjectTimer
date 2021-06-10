@@ -7,7 +7,7 @@ const groupSchema = mongoose.Schema({
         type: String,
         unique: true,
         required: [true, translator.translate("GROUP_NAME_REQUIRED")],
-        match: /[a-z]/,
+        match: /[a-zA-Z0-9\-\_\ ]/,
         minlength: [3, translator.translate("GROUP_NAME_TOO_LONG")],
     },
     admin: {

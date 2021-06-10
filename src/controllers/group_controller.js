@@ -79,7 +79,7 @@ exports.createGroup = async (req, res) => {
         user.groups.push(saved);
 
         await user.save();
-        res.json({
+        res.status(201).json({
             message: translator.translate("GROUP_CREATED", [group.name, user.lastname, user.firstname]),
             data: {
                 "id": saved._id,
