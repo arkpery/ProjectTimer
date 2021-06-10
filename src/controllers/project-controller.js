@@ -81,7 +81,18 @@ exports.getProjectById = async (req, res) => {
 
         await Project.findById(req.params.projectId)
             .populate('groups', ['name', 'admin', 'members'])
-            .populate("groups.admin", ["email", "firstName", "lastName"])
+            .populate({
+                path: "groups",
+                populate: {
+                    path: "admin"
+                }
+            })
+            .populate({
+                path: "groups",
+                populate: {
+                    path: "members"
+                }
+            })
             .populate('admin', ['email', 'firstName', 'lastName'])
             .exec((error, result) => {
                 if (error) console.log(error)
