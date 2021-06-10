@@ -75,7 +75,7 @@ exports.createGroup = async (req, res) => {
     group.admin = decoded.user.id;
     try {
         const saved = await group.save();
-        const user = await User.findById(body.admin);
+        const user = await User.findById(decoded.user.id);
         user.groups.push(saved);
 
         await user.save();

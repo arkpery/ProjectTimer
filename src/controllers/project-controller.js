@@ -15,6 +15,8 @@ const translator = require("../services/translate");
  * @param {*} res 
  */
 exports.createProject = async (req, res) => {
+    const decoded = groupJwt.decode_token(req);
+
     try {
         await projectServices.verifData(req)
         // Create a Project
@@ -23,7 +25,7 @@ exports.createProject = async (req, res) => {
                 _id: mongoose.Types.ObjectId(),
                 name: req.body.name,
                 groups: req.body.groups,
-                admin: req.body.admin,
+                admin: decoded.user.id,
                 timers: [],
                 close: req.body.close,
             });
