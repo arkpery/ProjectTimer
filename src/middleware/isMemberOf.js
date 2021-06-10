@@ -74,6 +74,7 @@ exports.isMemberOf = (type) => {
                             return next();
                         }
                     }
+                    throw new AppError(translator.translate("PROJECT_MEMBERS"), 403);
                 }
                 catch (e){
                     if (e instanceof AppError){

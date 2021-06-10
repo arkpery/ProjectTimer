@@ -2,6 +2,7 @@
     "GROUP_DUPLICATED_LIST": "Il y a des valeurs dupliqués",
     "GROUP_ADMINISTRATOR": "Vous devez être un administrateur",
     "PROJECT_ADMINISTRATOR": "Vous devez être un administrateur",
+    "PROJECT_MEMBERS": "Vous devez être un membre du groupe",
     "PLEASE_INSERT_GROUP": "S'il vous plait, insérer un groupe",
     "PLEASE_PROJECT_CLOSED": "S'il vous plait, modifier si le projet est clos ou non",
     "TIMER_CREATED_SUCCESSFULLY": "Tâche créée",
@@ -42,5 +43,6 @@
     "PROJECT_NAME_REQUIRED": "Le nom du projet est requis !",
     "GROUP_NAME_REQUIRED": "Le nom du groupe est requis !",
     "GROUP_NAME_TOO_LONG": "Le nom du groupe est trop long !",
-    "MEMBER_REQUIRED": "Des membres sont requis"
+    "MEMBER_REQUIRED": "Des membres sont requis",
+    "PROJECT_CLOSED": "Le projet est clos"
 }

@@ -53,8 +53,23 @@ exports.createProject = async (req, res) => {
  * @param {*} res 
  */
 exports.getAllProjects = async (req, res) => {
+    const decoded = await projectJwt.decode_token(req);
     try {
-        await Project.find({})
+        const groups = await Group.find({
+            "$or": [
+                {
+                    "members": decoded.user.id
+                },
+                {
+                    "admin": decoded.user.id
+                }
+            ]
+        });
+        await Project.find({
+            groups: {
+                "$in": groups
+            }
+        })
             .populate('groups', ['_id', 'name', 'admin', 'members'])
             .populate('admin', ["_id", 'email', 'firstName', 'lastName'])
             .exec((error, result) => {
@@ -110,7 +125,6 @@ exports.updateProject = async (req, res) => {
 
     try {
         await projectServices.verifData(req);
-        await projectServices.verifyAdmin(req);
         const decoded = projectJwt.decode_token(req);
 
         const update = {
@@ -147,8 +161,6 @@ exports.updateProject = async (req, res) => {
 exports.deleteProject = async (req, res) => {
     try {
         const project = req.params.projectId;
-        const decoded = await projectJwt.decode_token(req)
-        await projectServices.checkIfAdmin(project, decoded.user.id)
 
         Project.deleteOne({
             _id: project
@@ -163,3 +175,18 @@ exports.deleteProject = async (req, res) => {
         errorHandler(error, res)
     }
 }
+
+exports.closeProject = async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.projectId);
+
+        project.close = true;
+        await Project.findByIdAndUpdate(req.params.projectId, project);
+        res.status(200).json({
+            message: translator.translate("PROJECT_CLOSED", project)
+        });
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+};
