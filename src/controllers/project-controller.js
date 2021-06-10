@@ -15,7 +15,7 @@ const translator = require("../services/translate");
  * @param {*} res 
  */
 exports.createProject = async (req, res) => {
-    const decoded = groupJwt.decode_token(req);
+    const decoded = projectJwt.decode_token(req);
 
     try {
         await projectServices.verifData(req)
