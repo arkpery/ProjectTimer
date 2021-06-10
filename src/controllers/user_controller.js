@@ -340,6 +340,13 @@ exports.getUserById = async (req, res) => {
     }
 };
 
+exports.Me = (req, res) => {
+    const decoded = userJwt.decode_token(req);
+    req.params.id = decoded.user.id;
+
+    this.getUserById(req, res);
+}
+
 /**
  * Function used for updating user by id
  * @param {*} req 

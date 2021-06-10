@@ -18,6 +18,7 @@ router.post('/users/new-password', userController.NewPassword);
 // Check  the token with user id
 router.post('/users/valid-password-token', userController.ValidPasswordToken);
 
+router.get("/users/me", jwtMiddleware.verify_token, userController.Me);
 
 // Get all users
 router.get("/users", jwtMiddleware.verify_token, userController.listAllUsers);
