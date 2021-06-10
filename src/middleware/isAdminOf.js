@@ -27,6 +27,7 @@ exports.isAdminOf = (type) => {
                     }
                 }
                 catch (e){
+                    console.log(e.message);
                     if (e instanceof AppError){
                         res.status(e.status).json({
                             message: e.message
