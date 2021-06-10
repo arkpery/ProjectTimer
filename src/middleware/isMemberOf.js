@@ -2,6 +2,7 @@ const jwtMiddleware = require("./jwtMiddleware");
 const User = require("../models/user_model").Model;
 const Project = require("../models/project-model");
 const translator = require("../services/translate");
+const isValidParamsId = require("./isValidParamsId");
 
 exports.isMemberOf = (type) => {
     switch (type) {
@@ -11,6 +12,13 @@ exports.isMemberOf = (type) => {
                 const userId = req.params.userId;
                 const id = decoded.user.id;
                 const user1 = await User.findById(id);
+
+                if (!isValidParamsId.isValidId(userId)) {
+                    res.status(404).json({
+                        message: translator.translate("ID_NOT_VALID", userId)
+                    });
+                    return;
+                }
                 const user2 = await User.findById(userId);
 
                 if (user1 === null) {
@@ -41,6 +49,12 @@ exports.isMemberOf = (type) => {
                 const decoded = jwtMiddleware.decode_token(req);
                 const projectId = req.params.projectId || req.body.project;
                 const id = decoded.user.id;
+                if (!isValidParamsId.isValidId(projectId)) {
+                    res.status(404).json({
+                        message: translator.translate("ID_NOT_VALID", projectId)
+                    });
+                    return;
+                }
                 const user = await User.findById(id);
                 const project = await Project.findById(projectId);
 

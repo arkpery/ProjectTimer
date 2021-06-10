@@ -52,11 +52,12 @@ exports.verifData = async (req) => {
  * @return true
  */
 exports.checkValidProjectId = async (id) => {
+    console.log(id);
     if (!isValidId(id)) {
-        throw new AppError(`${translator.translate("ID_NOT_VALID")} ${id}`, 400)
+        throw new AppError(`${translator.translate("ID_NOT_VALID")}`, 400)
     } else {
         const exist = await Project.exists({ _id: id })
-        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
+        if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")}`, 400)
     }
 
     return true

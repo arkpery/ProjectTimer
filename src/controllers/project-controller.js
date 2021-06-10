@@ -77,12 +77,11 @@ exports.getAllProjects = async (req, res) => {
  */
 exports.getProjectById = async (req, res) => {
     try {
-        const project = req.params.projectId
-        await projectServices.checkValidProjectId(project)
+        await projectServices.checkValidProjectId(req.params.projectId);
 
-
-        await Project.findById(project)
+        await Project.findById(req.params.projectId)
             .populate('groups', ['name', 'admin', 'members'])
+            .populate("groups.admin", ["email", "firstName", "lastName"])
             .populate('admin', ['email', 'firstName', 'lastName'])
             .exec((error, result) => {
                 if (error) console.log(error)
