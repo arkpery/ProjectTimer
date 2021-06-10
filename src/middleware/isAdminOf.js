@@ -10,106 +10,126 @@ exports.isAdminOf = (type) => {
     switch (type) {
         case "PROJECT":
             return (async (req, res, next) => {
-                const decoded = jwtMiddleware.decode_token(req);
-                const id = decoded.user.id;
-                const projectId = req.params.projectId;
-
-                if (!isValidParamsId.isValidId(projectId)) {
-                    res.status(404).json({
-                        message: translator.translate("ID_NOT_VALID", projectId)
-                    });
-                    return;
+                try {
+                    const decoded = jwtMiddleware.decode_token(req);
+                    const id = decoded.user.id;
+                    const projectId = req.params.projectId;
+    
+                    if (!isValidParamsId.isValidId(projectId)) {
+                        throw new AppError(translator.translate("ID_NOT_VALID", projectId), 404);
+                    }
+                    const project = await Project.findById(projectId);
+    
+                    if (!project) {
+                        throw new AppError(translator.translate("PROJECT_EMPTY"), 404);
+                    } else if (project.admin.toString() === id.toString()) {
+                        return next();
+                    }
                 }
-                const project = await Project.findById(projectId);
-
-                if (!project) {
-                    res.status(404).json({
-                        message: translator.translate("PROJECT_EMPTY")
-                    });
-                    return;
-                } else if (project.admin.toString() === id.toString()) {
-                    return next();
+                catch (e){
+                    if (e instanceof AppError){
+                        res.status(e.status).json({
+                            message: e.message
+                        });
+                    }
+                    else {
+                        res.status(403).end();
+                    }
                 }
-                res.status(403).end();
             });
             break;
 
         case "GROUP":
             return (async (req, res, next) => {
-                const decoded = jwtMiddleware.decode_token(req);
-                const id = decoded.user.id;
-                const groupId = req.params.groupId;
-                if (!isValidParamsId.isValidId(groupId)) {
-                    res.status(404).json({
-                        message: translator.translate("ID_NOT_VALID", groupId)
-                    });
-                    return;
+                try {
+                    const decoded = jwtMiddleware.decode_token(req);
+                    const id = decoded.user.id;
+                    const groupId = req.params.groupId;
+                    if (!isValidParamsId.isValidId(groupId)) {
+                        throw new AppError(translator.translate("ID_NOT_VALID", groupId), 404);
+                    }
+                    const group = await Group.findById(groupId);
+    
+                    if (group === null) {
+                        throw new AppError(translator.translate("GROUP_EMPTY"), 404);
+                    }
+                    else if (group.admin.toString() === id.toString()) {
+                        return next();
+                    }
                 }
-                const group = await Group.findById(groupId);
-
-                if (group === null) {
-                    res.status(404).json({
-                        message: translator.translate("GROUP_EMPTY")
-                    });
-                    return;
+                catch (e){
+                    if (e instanceof AppError){
+                        res.status(e.status).json({
+                            message: e.message
+                        });
+                    }
+                    else {
+                        res.status(403).end();
+                    }
                 }
-                else if (group.admin.toString() === id.toString()) {
-                    return next();
-                }
-                res.status(403).end();
             });
             break;
 
         case "TIMER":
             return (async (req, res, next) => {
-                const decoded = jwtMiddleware.decode_token(req);
-                const id = decoded.user.id;
-                const timerId = req.params.timerId;
-
-                if (!isValidParamsId.isValidId(timerId)) {
-                    res.status(404).json({
-                        message: translator.translate("ID_NOT_VALID", timerId)
-                    });
-                    return;
+                try {
+                    const decoded = jwtMiddleware.decode_token(req);
+                    const id = decoded.user.id;
+                    const timerId = req.params.timerId;
+    
+                    if (!isValidParamsId.isValidId(timerId)) {
+                        throw new AppError(translator.translate("ID_NOT_VALID", timerId), 404);
+                    }
+                    const timer = await Timer.findById(timerId).populate("project");
+    
+                    if (timer === null) {
+                        throw new AppError(translator.translate("TIMER_EMPTY", timerId), 404);
+                    } else if (timer.project.admin.toString() === id.toString()) {
+                        return next();
+                    }
                 }
-                const timer = await Timer.findById(timerId).populate("project");
-
-                if (timer === null) {
-                    res.status(404).json({
-                        message: translator.translate("TIMER_EMPTY")
-                    });
-                    return;
-                } else if (timer.project.admin.toString() === id.toString()) {
-                    return next();
+                catch (e){
+                    if (e instanceof AppError){
+                        res.status(e.status).json({
+                            message: e.message
+                        });
+                    }
+                    else {
+                        res.status(403).end();
+                    }
                 }
-                res.status(403).end();
             });
             break;
 
         default:
             return (async (req, res, next) => {
-                const decoded = jwtMiddleware.decode_token(req);
-                const id = decoded.user.id;
-                const projectId = req.params.projectId;
-
-                if (!isValidParamsId.isValidId(projectId)) {
-                    res.status(404).json({
-                        message: translator.translate("ID_NOT_VALID", projectId)
-                    });
-                    return;
+                try {
+                    const decoded = jwtMiddleware.decode_token(req);
+                    const id = decoded.user.id;
+                    const projectId = req.params.projectId;
+    
+                    if (!isValidParamsId.isValidId(projectId)) {
+                        throw new AppError(translator.translate("ID_NOT_VALID", projectId), 404);
+                    }
+                    const project = await Project.findById(projectId);
+    
+                    if (project === null) {
+                        throw new AppError(translator.translate("PROJECT_EMPTY", projectId), 404);
+                    }
+                    else if (project.admin.toString() === id.toString()) {
+                        return next();
+                    }
                 }
-                const project = await Project.findById(projectId);
-
-                if (project === null) {
-                    res.status(404).json({
-                        message: translator.translate("PROJECT_EMPTY")
-                    });
-                    return;
+                catch (e){
+                    if (e instanceof AppError){
+                        res.status(e.status).json({
+                            message: e.message
+                        });
+                    }
+                    else {
+                        res.status(403).end();
+                    }  
                 }
-                else if (project.admin.toString() === id.toString()) {
-                    return next();
-                }
-                res.status(403).end();
             });
             break;
     }
