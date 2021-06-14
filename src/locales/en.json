@@ -44,5 +44,6 @@
     "GROUP_NAME_REQUIRED": "The group name is required !",
     "GROUP_NAME_TOO_LONG": "Group name too long !",
     "MEMBER_REQUIRED": "Members is required",
-    "PROJECT_CLOSED": "The project is closed"
+    "PROJECT_CLOSED": "The project is closed",
+    "GROUP_LIST": "Groups list"
 }
