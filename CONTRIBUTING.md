@@ -6,14 +6,18 @@ The following is a set of guidelines for contributing to ProjectTimer and its pa
 
 #### Table Of Contents
 
-[Code of Conduct](https://github.com/arkpery/ProjectTimer-back-end/master/CONTRIBUTING.md#code-of-conduct)
+[Code of Conduct](#code-of-conduct)
 
-[Test and Environmental Details](https://github.com/arkpery/ProjectTimer-back-end/master/CONTRIBUTING.md#test-and-environmental-details)
+[Test and Environmental Details](#test-and-environmental-details)
 
-## [](https://github.com/arkpery/ProjectTimer-back-end/master/CONTRIBUTING.md#code-of-conduct)Code of Conduct
+## [](#code-of-conduct)Code of Conduct
 
-This project and everyone participating in it is governed by the  [Code of Conduct](https://github.com/arkpery/ProjectTimer-back-end/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to  [tsimoes@la-pmn.org](mailto:tsimoes@la-pmn.org).
+This project and everyone participating in it is governed by the  [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to  [ofenniche@la-pmn.org](mailto:ofenniche@la-pmn.org), [tsimoes@la-pmn.org](mailto:tsimoes@la-pmn.org), [vteissiercouturier@la-pmn.org](mailto:vteissiercouturier@la-pmn.org).
 
-## [](https://github.com/arkpery/ProjectTimer-back-end/master/CONTRIBUTING.md#test-and-environmental-details)Test and Environmental Details
+## [](#test-and-environmental-details)Test and Environmental Details
     
-For environmental details and testing read [README.md](https://github.com/arkpery/ProjectTimer-back-end/master/README.md)
+For environmental details and testing read [README.md](README.md)
+
+## How Can I Contribute?
+
+To contribute to the project, you must join the community via the [discrod channel](https://discord.gg/dyd687tvcU) where everything is indicated
