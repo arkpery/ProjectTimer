@@ -2,6 +2,8 @@ const timers = require("../../controllers/timer-controller.js");
 const Context = require("../../services/context");
 const isMemberOf = require("../../middleware/isMemberOf").isMemberOf;
 const isAdminOf = require("../../middleware/isAdminOf").isAdminOf;
+const isCloseProject = require("../../middleware/isCloseProject").isCloseProject;
+
 const { router, id } = Context.Pull();
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
 
@@ -21,7 +23,7 @@ router.put('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf("TIMER")],
 router.delete('/timers/:timerId', [jwtMiddleware.verify_token, isAdminOf("TIMER")], timers.deleteTimer);
 
 // Start timer
-router.post("/timers/:projectId/start", [jwtMiddleware.verify_token, isMemberOf("PROJECT")], timers.startTimer);
+router.post("/timers/:projectId/start", [jwtMiddleware.verify_token, isMemberOf("PROJECT"), isCloseProject()], timers.startTimer);
 
 // Stop timer
 router.put("/timers/:projectId/stop/:id", [jwtMiddleware.verify_token, isMemberOf("PROJECT")], timers.stopTimer);
