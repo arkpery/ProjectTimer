@@ -10,6 +10,9 @@ router.get("/groups", jwtMiddleware.verify_token, groupController.getAllGroups);
 // Get Group by Id
 router.get("/groups/:groupId", jwtMiddleware.verify_token, groupController.getGroupById);
 
+// List group by project
+router.get("/groups/project/:projectId", jwtMiddleware.verify_token, groupController.listGroupByProject);
+
 // Create Group
 router.post("/groups", jwtMiddleware.verify_token, groupController.createGroup);
 

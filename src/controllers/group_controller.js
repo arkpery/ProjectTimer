@@ -1,8 +1,13 @@
 const Group = require("../models/group_model").Model;
 const User = require("../models/user_model").Model;
+const Project = require("../models/project-model");
 const groupJwt = require('../middleware/jwtMiddleware')
 const groupServices = require('../services/groups-services')
 const translator = require("../services/translate");
+const projectServices = require("../services/projects-service");
+const {
+    errorHandler
+} = require('../middleware/errorsHandler');
 
 /**
  * Function to get the list and details of all groups
@@ -212,5 +217,32 @@ exports.updateGroupById = async (req, res) => {
         res.status(400).json({
             err: e.message
         });
+    }
+};
+
+exports.listGroupByProject = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        await projectServices.checkValidProjectId(projectId);
+        const projet = await Project.findById(projectId).populate({
+            path: "groups",
+            populate: {
+                path: "admin"
+            }
+        }).populate({
+            path: "groups",
+            populate: {
+                path: "members"
+            }
+        });
+        const groups = projet.groups;
+
+        res.json({
+            message: "list groups",
+            data: groups
+        });
+    }
+    catch (err){
+        errorHandler(err, res);
     }
 };
