@@ -8,6 +8,7 @@ const projectService = require("../services/projects-service");
 const userService = require('../services/users-services');
 const translator = require("../services/translate");
 const timersService = require("../services/timers-services");
+const jwt = require("../middleware/jwtMiddleware");
 /**
  * 
  * @param {*} req 
@@ -144,10 +145,13 @@ exports.checkTimerId = async (id) => {
 
 exports.startTimer = async (req, res) => {
     try {
+        const decoded = jwt.decode_token(req);
+
         await timersService.canStart(req.params.projectId);
         const t = req.body;
         t.startTime = Date.now();
         t.duration = 0;
+        t.user = decoded.user.id;
         t.project = req.params.projectId;
         const timer = new Timer(t);
         await timer.save(async (error, created) => {
