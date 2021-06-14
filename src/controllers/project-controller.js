@@ -178,14 +178,14 @@ exports.deleteProject = async (req, res) => {
 
 exports.closeProject = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.projectId);
-
+        const projectId = req.params.projectId;
+        await projectServices.checkValidProjectId(projectId);
+        const project = await Project.findById(projectId);
         project.close = true;
-        await Project.findByIdAndUpdate(req.params.projectId, project);
+        await Project.findByIdAndUpdate(projectId, project);
         res.status(200).json({
             message: translator.translate("PROJECT_CLOSED", project)
         });
-
     } catch (error) {
         errorHandler(error, res)
     }

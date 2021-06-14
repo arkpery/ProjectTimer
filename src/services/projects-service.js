@@ -25,6 +25,9 @@ exports.verifData = async (req) => {
 
     let nameUsed
 
+    if (project){
+        await this.checkValidProjectId(project);
+    }
     if (project) {
         nameUsed = await Project.exists({ _id: { $nin: project }, name: name.trim() })
     } else {
