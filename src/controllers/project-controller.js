@@ -58,18 +58,18 @@ exports.getAllProjects = async (req, res) => {
     try {
         const groups = await Group.find({
             "$or": [{
-                    "members": decoded.user.id
-                },
-                {
-                    "admin": decoded.user.id
-                }
+                "members": decoded.user.id
+            },
+            {
+                "admin": decoded.user.id
+            }
             ]
         });
         await Project.find({
-                groups: {
-                    "$in": groups
-                }
-            })
+            groups: {
+                "$in": groups
+            }
+        })
             .populate('groups', ['_id', 'name', 'admin', 'members'])
             .populate('admin', ["_id", 'email', 'firstName', 'lastName'])
             .exec((error, result) => {
@@ -200,7 +200,7 @@ exports.findByGroup = async (req, res) => {
             "groups": {
                 "$in": groupId
             }
-        });
+        }).populate('admin').populate('groups');
 
         res.json(list);
     } catch (error) {
