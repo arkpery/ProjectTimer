@@ -15,19 +15,29 @@ const {
  * @param {Array} res 
  */
 exports.getAllGroups = async (req, res) => {
-    const perPage = req.query.perPage ?? 10;
+    const decoded = groupJwt.decode_token(req);
+    const perPage = req.query.perPage ?? 30;
     const numPage = req.query.numPage ?? 1;
     const firstIndex = perPage * (numPage - 1);
 
     try {
-        const list = await Group.find({}, null, {
+        const list = await Group.find({
+            "$or": [{
+                    "members": decoded.user.id
+                },
+                {
+                    "admin": decoded.user.id
+                }
+            ]
+        }, null, {
             skip: firstIndex,
             limit: perPage
-        }).populate("admin", ['email', 'firstname', 'lastname', 'groups', 'avatar']).populate("members", ['email', 'firstname', 'lastname', 'groups', 'avatar']);
+        })
+        .populate("admin", ['email', 'firstname', 'lastname', 'groups', 'avatar'])
+        .populate("members", ['email', 'firstname', 'lastname', 'groups', 'avatar']);
 
         res.json(list);
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({
             err: e.message
         });
@@ -59,8 +69,7 @@ exports.getGroupById = async (req, res) => {
             return;
         }
         res.json(group);
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({
             err: e.message
         });
@@ -91,8 +100,7 @@ exports.createGroup = async (req, res) => {
                 "name": saved.name
             }
         });
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({
             err: e.message
         });
@@ -129,8 +137,7 @@ exports.deleteGroupById = async (req, res) => {
         res.json({
             message: translator.translate("GROUP_DELETED", group.name)
         });
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({
             err: e.message
         });
@@ -177,8 +184,7 @@ exports.updateGroupById = async (req, res) => {
             }
             if (user._id.toString() == updated.admin.toString()) {
                 console.log("enter");
-            }
-            else if (flag) {
+            } else if (flag) {
                 let f2 = true;
 
                 while (f2) {
@@ -186,8 +192,7 @@ exports.updateGroupById = async (req, res) => {
 
                     if (index > -1) {
                         user.groups.splice(index, 1);
-                    }
-                    else {
+                    } else {
                         f2 = false;
                     }
                 }
@@ -212,8 +217,7 @@ exports.updateGroupById = async (req, res) => {
             message: translator.translate("GROUP_UPDATED", updated.name),
             group
         });
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({
             err: e.message
         });
@@ -241,8 +245,7 @@ exports.listGroupByProject = async (req, res) => {
             message: "list groups",
             data: groups
         });
-    }
-    catch (err){
+    } catch (err) {
         errorHandler(err, res);
     }
 };
