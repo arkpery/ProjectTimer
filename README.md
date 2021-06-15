@@ -16,13 +16,15 @@ La description du projet est disponible ici >[Project](Project.md)
 Pour pouvoir compiler et lancer le serveur depuis les sources les logiciels suivants sont nécessaire :
 - Docker
 - docker-compose
+- Cygwin sur windows
 
-# Installation & Utilisation
-- Installation: make init
-- Dev Environment: make dev
-- Prod Environment: make prod
-- Stop : make shutdown
-- Reset : make clear
+# Installation & Utilisation on Linux OS X
+- Run: `make`
+- Install: `make init`
+- Dev Environment: `make dev`
+- Prod Environment: `make prod`
+- Stop : `make shutdown`
+- Reset : `make clear`
 
 # Technologies
 
