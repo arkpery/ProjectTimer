@@ -3,7 +3,8 @@ const Project = require('../models/project-model');
 const Group = require("../models/group_model").Model;
 const Timer = require('../models/timer-model.js');
 const User = require('../models/user_model');
-const projectServices = require('../services/projects-service')
+const projectServices = require('../services/projects-service');
+const groupServices = require("../services/groups-services");
 const projectJwt = require('../middleware/jwtMiddleware')
 const {
     errorHandler
@@ -56,8 +57,7 @@ exports.getAllProjects = async (req, res) => {
     const decoded = await projectJwt.decode_token(req);
     try {
         const groups = await Group.find({
-            "$or": [
-                {
+            "$or": [{
                     "members": decoded.user.id
                 },
                 {
@@ -66,10 +66,10 @@ exports.getAllProjects = async (req, res) => {
             ]
         });
         await Project.find({
-            groups: {
-                "$in": groups
-            }
-        })
+                groups: {
+                    "$in": groups
+                }
+            })
             .populate('groups', ['_id', 'name', 'admin', 'members'])
             .populate('admin', ["_id", 'email', 'firstName', 'lastName'])
             .exec((error, result) => {
@@ -186,6 +186,23 @@ exports.closeProject = async (req, res) => {
         res.status(200).json({
             message: translator.translate("PROJECT_CLOSED", project)
         });
+    } catch (error) {
+        errorHandler(error, res)
+    }
+};
+
+
+exports.findByGroup = async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        await groupServices.checkValidGroupId(groupId);
+        const list = await Project.find({
+            "groups": {
+                "$in": groupId
+            }
+        });
+
+        res.json(list);
     } catch (error) {
         errorHandler(error, res)
     }
