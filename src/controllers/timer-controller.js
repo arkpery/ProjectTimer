@@ -17,7 +17,6 @@ const jwt = require("../middleware/jwtMiddleware");
 exports.setTimer = async (req, res) => {
     try {
         const t = req.body;
-        t.duration = 0;
         const timer = new Timer(t);
         await timer.save(async (error, created) => {
             if (error) console.log(error)
