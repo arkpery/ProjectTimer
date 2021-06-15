@@ -18,7 +18,11 @@ Pour pouvoir compiler et lancer le serveur depuis les sources les logiciels suiv
 - docker-compose
 
 # Installation & Utilisation
-- docker-compose up --build
+- Installation: make init
+- Dev Environment: make dev
+- Prod Environment: make prod
+- Stop : make shutdown
+- Reset : make clear
 
 # Technologies
 
