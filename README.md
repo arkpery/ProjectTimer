@@ -18,7 +18,7 @@ Pour pouvoir compiler et lancer le serveur depuis les sources les logiciels suiv
 - docker-compose
 - Cygwin sur windows
 
-# Installation & Utilisation on Linux OS X
+# Installation & Utilisation
 - Run: `make`
 - Install: `make init`
 - Dev Environment: `make dev`
