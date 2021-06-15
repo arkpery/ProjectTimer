@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const Timer = require('../models/timer-model');
 const Project = require('../models/project-model');
-const { isValidId } = require("../middleware/isValidParamsId")
-const { errorHandler } = require('../middleware/errorsHandler')
+const {
+    isValidId
+} = require("../middleware/isValidParamsId")
+const {
+    errorHandler
+} = require('../middleware/errorsHandler')
 const AppError = require("../errors/app-errors")
 const projectService = require("../services/projects-service");
 const userService = require('../services/users-services');
@@ -15,19 +19,20 @@ const jwt = require("../middleware/jwtMiddleware");
  * @param {*} res 
  */
 exports.setTimer = async (req, res) => {
+ 
     try {
+        const decoded = jwt.decode_token(req);
         const t = req.body;
+        t.user = decoded.user.id;
         const timer = new Timer(t);
-        await timer.save(async (error, created) => {
-            if (error) console.log(error)
-            await created.populate({
-                path: "user",
-                select: 'groups email firstname',
-            }).populate('project').execPopulate();
-            return res.status(200).json({
-                message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
-                created
-            })
+        const created = await timer.save()
+        const fromDB = await Timer.findById(created._id).populate({
+            path: "user",
+            select: 'groups email firstname',
+        }).populate('project');
+        return res.status(200).json({
+            message: translator.translate("TIMER_CREATED_SUCCESSFULLY"),
+            fromDB
         });
     } catch (error) {
         errorHandler(error, res)
@@ -44,7 +49,9 @@ exports.getTimerByProject = async (req, res) => {
         const project = req.params.projectId;
         await projectService.checkValidProjectId(project)
 
-        Timer.find({ project: project })
+        Timer.find({
+                project: project
+            })
             .populate('user', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
@@ -68,7 +75,9 @@ exports.getTimerByUser = async (req, res) => {
         const user = req.params.userId;
         await userService.checkValidUserId(user)
 
-        Timer.find({ user: user })
+        Timer.find({
+                user: user
+            })
             .populate('user', ['email', 'firstName', 'lastName'])
             .populate('project', 'name')
             .exec((error, result) => {
@@ -116,8 +125,12 @@ exports.deleteTimer = async (req, res) => {
         const timer = req.params.timerId;
         await this.checkTimerId(timer);
 
-        Timer.findByIdAndRemove({ _id: timer }, (error) => {
-            res.status(200).json({ "message": translator.translate("TIMER_REMOVED_SUCCESSFULLY") })
+        Timer.findByIdAndRemove({
+            _id: timer
+        }, (error) => {
+            res.status(200).json({
+                "message": translator.translate("TIMER_REMOVED_SUCCESSFULLY")
+            })
             if (error) console.log(error)
         });
 
@@ -135,7 +148,9 @@ exports.checkTimerId = async (id) => {
     if (!isValidId(id)) {
         throw new AppError(`${translator.translate("ID_NOT_VALID")} ${id}`, 400)
     } else {
-        const exist = await Timer.exists({ _id: id })
+        const exist = await Timer.exists({
+            _id: id
+        })
         if (!exist) throw new AppError(`${translator.translate("ID_NOT_EXIST")} ${id}`, 400)
     }
     return true
