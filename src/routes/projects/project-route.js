@@ -18,6 +18,9 @@ router.get('/projects/:projectId', [jwtMiddleware.verify_token, isMemberOf("PROJ
 // Update a Project by projectId
 router.put('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.updateProject);
 
+// Find projects by group
+router.get("/projects/:groupId/groups", jwtMiddleware.verify_token, projects.findByGroup);
+
 // Close project
 router.put("/projects/:projectId/close", [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.closeProject);
 
