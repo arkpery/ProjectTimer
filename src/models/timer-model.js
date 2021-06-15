@@ -16,7 +16,8 @@ const TimerSchema = mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
-        require: translator.translate("USER_REQUIRED")
+        require: translator.translate("USER_REQUIRED"),
+        required: true
     },
 
     startTime: {
@@ -26,6 +27,7 @@ const TimerSchema = mongoose.Schema({
 
     duration: {
         type: Number,
+        required: true
     },
 
     project: {
