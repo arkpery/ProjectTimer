@@ -15,7 +15,7 @@ const translator = require("./translate");
  */
 exports.verifData = async (req) => {
     const groups = req.body.groups
-    if (!groups) throw new AppError(translator.translate("PLEASE_INSERT_GROUP"))
+    if (!groups || !groups.length) throw new AppError(translator.translate("PLEASE_INSERT_GROUP"))
     await groupServices.checkListGroups(groups)
     const project = req.params.projectId
     const name = req.body.name
