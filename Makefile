@@ -4,9 +4,9 @@ init:
 	cp .env.sample .env
 	cp .env.sample .env.dev
 	cp .env.sample .env.prod
-	sed -E -i -e "s/ENV=.*/ENV=dev/g" .env
-	sed -E -i -e "s/ENV=.*/ENV=dev/g" .env.dev
-	sed -E -i -e "s/ENV=.*/ENV=prod/g" .env.prod
+	sed -i -E -e "s/ENV=.*/ENV=dev/g" .env
+	sed -i -E -e "s/ENV=.*/ENV=dev/g" .env.dev
+	sed -i -E -e "s/ENV=.*/ENV=prod/g" .env.prod
 	rm .env-E
 	rm .env.dev-E
 	rm .env.prod-E
