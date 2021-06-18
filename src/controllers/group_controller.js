@@ -22,19 +22,19 @@ exports.getAllGroups = async (req, res) => {
 
     try {
         const list = await Group.find({
-            "$or": [{
-                    "members": decoded.user.id
-                },
-                {
-                    "admin": decoded.user.id
-                }
-            ]
-        }, null, {
-            skip: firstIndex,
-            limit: perPage
-        })
-        .populate("admin", ['email', 'firstname', 'lastname', 'groups', 'avatar'])
-        .populate("members", ['email', 'firstname', 'lastname', 'groups', 'avatar']);
+                "$or": [{
+                        "members": decoded.user.id
+                    },
+                    {
+                        "admin": decoded.user.id
+                    }
+                ]
+            }, null, {
+                skip: firstIndex,
+                limit: perPage
+            })
+            .populate("admin", ['email', 'firstname', 'lastname', 'groups', 'avatar'])
+            .populate("members", ['email', 'firstname', 'lastname', 'groups', 'avatar']);
 
         res.json(list);
     } catch (e) {
@@ -245,6 +245,44 @@ exports.listGroupByProject = async (req, res) => {
             message: "list groups",
             data: groups
         });
+    } catch (err) {
+        errorHandler(err, res);
+    }
+};
+
+exports.insertProject = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const groupId = req.params.groupId;
+        await projectServices.checkValidProjectId(projectId);
+        await groupServices.checkValidGroupId(groupId);
+        const group = await Group.findById(groupId);
+        const project = await Project.findById(projectId);
+
+        if (!group) {
+            throw new AppError(translator.translate("GROUP_NOT_FOUND"), 404);
+        }
+        if (!project) {
+            throw new AppError(translator.translate("PROJECT_NOT_FOUND"), 404);
+        }
+        if (project.groups.indexOf(groupId) === -1) {
+            project.groups.push(groupId);
+        }
+        const updated = await Project
+            .findById(projectId)
+            .populate({
+                path: "groups",
+                populate: {
+                    path: "admin"
+                }
+            }).populate({
+                path: "groups",
+                populate: {
+                    path: "members"
+                }
+            });
+
+        res.json(updated)
     } catch (err) {
         errorHandler(err, res);
     }

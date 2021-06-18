@@ -16,6 +16,9 @@ router.get("/groups/project/:projectId", jwtMiddleware.verify_token, groupContro
 // Create Group
 router.post("/groups", jwtMiddleware.verify_token, groupController.createGroup);
 
+// Insert project in group
+router.put("/groups/:groupId/project/:projectId", [jwtMiddleware.verify_token, isAdminOf("GROUP")], groupController.insertProject);
+
 // Delete Group By Id
 router.delete("/groups/:groupId", [jwtMiddleware.verify_token, isAdminOf("GROUP")], groupController.deleteGroupById);
 
