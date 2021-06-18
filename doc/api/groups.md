@@ -338,3 +338,71 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
 ]
 
 ```
+
+
+
+### PUT
+
+  
+
+-  `PUT /groups/:groupId/project/:projectId` : Ajout d'un projet dans un groupe
+
+  
+
+- Paramètre dans l'URL :
+
+	-  `groupId` : L'id du groupe
+    -  `projectId` : L'id du projet
+
+- Retour :
+
+```json
+{
+    "members": [
+        {
+            "groups": [],
+            "_id": "60be341d49e947004e5162eb",
+            "email": "test2@gmail.com",
+            "firstname": "firstname2",
+            "lastname": "lastname2",
+            "avatar": "avatar2"
+        }
+    ],
+    "_id": "60be75ad65e22602750e61f3",
+    "name": "CREATION d'un groupe",
+    "admin": {
+        "groups": [
+            {
+                "members": [
+                    "60be341d49e947004e5162eb"
+                ],
+                "_id": "60be75ad65e22602750e61f3",
+                "name": "CREATION d'un groupe",
+                "admin": "60be3b2e5940380186ff9e52",
+                "created_at": "2021-06-07T19:38:21.526Z",
+                "updated_at": "2021-06-07T19:38:21.526Z",
+                "__v": 0
+            },
+            {
+                "members": [
+                    "60be341d49e947004e5162eb"
+                ],
+                "_id": "60be76dd65e22602750e61f5",
+                "name": "CREATION d'un groupe 2",
+                "admin": "60be3b2e5940380186ff9e52",
+                "created_at": "2021-06-07T19:43:25.624Z",
+                "updated_at": "2021-06-07T19:43:25.624Z",
+                "__v": 0
+            }
+        ],
+        "_id": "60be3b2e5940380186ff9e52",
+        "email": "test@gmail.com",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "avatar": "avatar"
+    },
+    "created_at": "2021-06-07T19:38:21.526Z",
+    "updated_at": "2021-06-07T19:38:21.526Z",
+    "__v": 0
+}
+```
