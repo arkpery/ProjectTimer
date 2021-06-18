@@ -115,7 +115,7 @@ Liste de tous les les points d'entrée lié à la gestion d'un utilisateur, ils 
 }
  ```
  
- -  `POST /users/ResetPassword` : Définition d'un nouveau mot de passe 
+ -  `POST /users/new-password` : Définition d'un nouveau mot de passe 
 
 ```json
 {
@@ -188,6 +188,27 @@ Pour toutes les méthodes Get, le Token est obligatoire.
 		-  `id` : L'id de l'utilisateur
 
   
+
+- Retour :
+```json
+{
+    "groups": [],
+    "_id": "60be32ee49e947004e5162ea",
+    "accessToken": null,
+    "email": "test@gmail.com",
+    "firstname": "firstname",
+    "lastname": "lastname",
+    "birthdate": "2000-01-01T00:00:00.000Z",
+    "avatar": "avatar",
+    "created_at": "2021-06-07T14:53:34.607Z",
+    "updated_at": "2021-06-07T14:53:34.607Z",
+    "__v": 0
+}
+```
+
+-  `GET /users/me` : Retourne les informations de l'utilisateur connecté
+
+
 
 - Retour :
 ```json

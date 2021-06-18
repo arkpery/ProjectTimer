@@ -165,6 +165,11 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
     }
 ]
 ```
+
+### GET
+
+
+
 -  `GET /timers/user/:userId` : Retourne la liste des timers par utilisateur
 	- Parametre dans l'URL :
 
@@ -210,39 +215,40 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
         "__v": 0
     }
 ]
-  ```
+```
 
--  `GET /groups/:id` : Retourne les informations d'un projet
+### GET
 
-- Retour :
 
+
+-  `GET /timers/:id` : Retourne les informations d'un timer
+	- Parametre dans l'URL :
+
+  
+
+		-  `id : L'id du timer
 ```json
-{
-    "groups": [
-        {
-            "members": [
-                "60bf3d12714f66002c86b710"
-            ],
-            "_id": "60bf3f2f714f66002c86b712",
-            "name": "CREATION d'un groupe",
-            "admin": "60bf3d0d714f66002c86b70f"
-        }
-    ],
-    "close": false,
-    "_id": "60bf3f69714f66002c86b715",
-    "name": "Projet NodeJS",
-    "admin": {
-        "_id": "60bf3d0d714f66002c86b70f",
-        "email": "test@gmail.com"
-    },
-    "created_at": "2021-06-08T09:59:05.397Z",
-    "updated_at": "2021-06-08T09:59:05.397Z",
-    "__v": 0
-}
+    {
+        "startTime": "2021-06-08T16:08:37.463Z",
+        "_id": "60bf96b30c467803e6080af9",
+        "description": "description de la tache 2",
+        "taskType": "tache 2",
+        "user": {
+            "_id": "60bf888637d8d6002cfcb69f",
+            "email": "test@gmail.com"
+        },
+        "project": {
+            "_id": "60bf96820c467803e6080af7",
+            "name": "Projet NodeJS PMN"
+        },
+        "duration": 0,
+        "created_at": "2021-06-08T16:11:31.022Z",
+        "updated_at": "2021-06-08T16:11:31.022Z",
+        "__v": 0
+    }
 ```
 
 
-  
 
 ### PUT
 
@@ -307,7 +313,7 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
 }
 ```
 
-  -  `PUT /timers/:projectId/stop/:id` : Stopper un timer
+-  `PUT /timers/:projectId/stop/:id` : Stopper un timer
 		- Paramètre dans l'URL :
 			- `projectId` : L'id du projet qui contient le timer
 			-  `id` : L'id de timer

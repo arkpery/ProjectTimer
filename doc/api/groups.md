@@ -263,3 +263,78 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
     "message": "Group CREATION d'un groupe deleted"
 }
 ```
+
+
+
+### GET
+
+  
+
+-  `GET /groups/project/:projectId` : Retourne la liste et les informations de tous les groups inscrit dans le projet envoyé
+
+  
+
+- Retour :
+
+```json
+
+[
+    {
+        "members": [
+            {
+                "groups": [],
+                "_id": "60be341d49e947004e5162eb",
+                "email": "test2@gmail.com",
+                "firstname": "firstname2",
+                "lastname": "lastname2",
+                "avatar": "avatar2"
+            }
+        ],
+        "_id": "60be75ad65e22602750e61f3",
+        "name": "CREATION d'un groupe",
+        "admin": {
+            "groups": [
+                "60be75ad65e22602750e61f3",
+                "60be76dd65e22602750e61f5"
+            ],
+            "_id": "60be3b2e5940380186ff9e52",
+            "email": "test@gmail.com",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "avatar": "avatar"
+        },
+        "created_at": "2021-06-07T19:38:21.526Z",
+        "updated_at": "2021-06-07T19:38:21.526Z",
+        "__v": 0
+    },
+    {
+        "members": [
+            {
+                "groups": [],
+                "_id": "60be341d49e947004e5162eb",
+                "email": "test2@gmail.com",
+                "firstname": "firstname2",
+                "lastname": "lastname2",
+                "avatar": "avatar2"
+            }
+        ],
+        "_id": "60be76dd65e22602750e61f5",
+        "name": "CREATION d'un groupe 2",
+        "admin": {
+            "groups": [
+                "60be75ad65e22602750e61f3",
+                "60be76dd65e22602750e61f5"
+            ],
+            "_id": "60be3b2e5940380186ff9e52",
+            "email": "test@gmail.com",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "avatar": "avatar"
+        },
+        "created_at": "2021-06-07T19:43:25.624Z",
+        "updated_at": "2021-06-07T19:43:25.624Z",
+        "__v": 0
+    }
+]
+
+```

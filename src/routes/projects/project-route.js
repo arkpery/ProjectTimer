@@ -18,13 +18,13 @@ router.get('/projects/:projectId', [jwtMiddleware.verify_token, isMemberOf("PROJ
 // Update a Project by projectId
 router.put('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.updateProject);
 
+// Delete a Project by projectaId
+router.delete('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.deleteProject);
+
 // Find projects by group
 router.get("/projects/:groupId/groups", jwtMiddleware.verify_token, projects.findByGroup);
 
 // Close project
 router.put("/projects/:projectId/close", [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.closeProject);
-
-// Delete a Project by projectaId
-router.delete('/projects/:projectId', [jwtMiddleware.verify_token, isAdminOf("PROJECT")], projects.deleteProject);
 
 module.exports = router;

@@ -313,3 +313,60 @@ Ici le token est obligatoire pour toutes les méthodes CRUD.
     "message": "The project is deleted"
 }
 ```
+
+
+
+### GET
+
+  
+
+-  `GET /projects/:groupId/groups` : Liste des différents projet en fonction du groupe envoyé
+	- Pour tous les utilisateurs
+- Parametre dans l'URL :
+
+	-  `groupId` : L'id du groupe 
+
+- Retour :
+```json
+[{
+    "groups": [
+        {
+            "members": [
+                "60bf3d16714f66002c86b711"
+            ],
+            "_id": "60bf3f45714f66002c86b714",
+            "name": "CREATION d'un groupe 2",
+            "admin": "60bf3d0d714f66002c86b70f"
+        }
+    ],
+    "close": false,
+    "_id": "60bf3f69714f66002c86b715",
+    "name": "Update Project NodeJS",
+    "admin": {
+        "_id": "60bf3d0d714f66002c86b70f",
+        "email": "test@gmail.com"
+    },
+    "created_at": "2021-06-08T09:59:05.397Z",
+    "updated_at": "2021-06-08T10:12:28.358Z",
+    "__v": 0
+}, ...]
+```
+
+
+
+### PUT
+
+  
+
+-  `PUT /projects/:projectId/close` : Fermeture du projet
+	- Seul l'administrateur a le droit de fermer un projet
+- Parametre dans l'URL :
+
+	-  `projectId` : L'id du projet 
+
+- Retour :
+```json
+{
+    "message": "The project is closed"
+}
+```
