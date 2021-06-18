@@ -250,7 +250,7 @@ exports.listGroupByProject = async (req, res) => {
     }
 };
 
-exports.insertProject = (req, res) => {
+exports.insertProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
         const groupId = req.params.groupId;
