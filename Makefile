@@ -4,9 +4,12 @@ init:
 	cp .env.sample .env
 	cp .env.sample .env.dev
 	cp .env.sample .env.prod
-	sed -E -e "s/ENV=.*/ENV=dev/g" -i .env
-	sed -E -e "s/ENV=.*/ENV=dev/g" -i .env.dev
-	sed -E -e "s/ENV=.*/ENV=prod/g" -i .env.prod
+	sed -E -i -e "s/ENV=.*/ENV=dev/g" .env
+	sed -E -i -e "s/ENV=.*/ENV=dev/g" .env.dev
+	sed -E -i -e "s/ENV=.*/ENV=prod/g" .env.prod
+	rm .env-E
+	rm .env.dev-E
+	rm .env.prod-E
 
 dev: 
 	docker-compose --env-file .env.dev  up --build 
