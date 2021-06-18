@@ -268,6 +268,7 @@ exports.insertProject = async (req, res) => {
         if (project.groups.indexOf(groupId) === -1) {
             project.groups.push(groupId);
         }
+        await Project.findByIdAndUpdate(projectId, project);
         const updated = await Project
             .findById(projectId)
             .populate({
