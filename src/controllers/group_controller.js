@@ -250,6 +250,45 @@ exports.listGroupByProject = async (req, res) => {
     }
 };
 
+exports.deleteProjectOnGroup = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const groupId = req.params.groupId;
+        await projectServices.checkValidProjectId(projectId);
+        await groupServices.checkValidGroupId(groupId);
+        const group = await Group.findById(groupId);
+        const project = await Project.findById(projectId);
+
+        if (!group) {
+            throw new AppError(translator.translate("GROUP_NOT_FOUND"), 404);
+        }
+        if (!project) {
+            throw new AppError(translator.translate("PROJECT_NOT_FOUND"), 404);
+        }
+        console.log(project.groups)
+        project.groups = project.groups.filter(group => group._id != groupId);
+        await Project.findByIdAndUpdate(projectId, project);
+        const updated = await Project
+            .findById(projectId)
+            .populate({
+                path: "groups",
+                populate: {
+                    path: "admin"
+                }
+            }).populate({
+                path: "groups",
+                populate: {
+                    path: "members"
+                }
+            });
+
+        res.json(updated)
+    } catch (err) {
+        errorHandler(err, res);
+    }
+};
+
+
 exports.insertProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;

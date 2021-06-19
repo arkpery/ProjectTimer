@@ -3,6 +3,7 @@ const Context = require("../../services/context");
 const { router, id } = Context.Pull();
 const jwtMiddleware = require('../../middleware/jwtMiddleware');
 const isAdminOf = require("../../middleware/isAdminOf").isAdminOf;
+const { $where } = require("../../models/project-model");
 
 // Get All Groups
 router.get("/groups", jwtMiddleware.verify_token, groupController.getAllGroups);
@@ -21,6 +22,9 @@ router.put("/groups/:groupId/project/:projectId", [jwtMiddleware.verify_token, i
 
 // Delete Group By Id
 router.delete("/groups/:groupId", [jwtMiddleware.verify_token, isAdminOf("GROUP")], groupController.deleteGroupById);
+
+
+router.put("/groups/:groupId/project/delete/:projectId", [jwtMiddleware.verify_token, isAdminOf("GROUP")], groupController.deleteProjectOnGroup);
 
 // Update Group By Id
 router.put("/groups/:groupId", [jwtMiddleware.verify_token, isAdminOf("GROUP")], groupController.updateGroupById);
