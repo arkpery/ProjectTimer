@@ -4,8 +4,7 @@ Dans ce document se trouve toutes les informations sur le fonctionnement et l'ut
 
 ## API
 
-L'API du serveur est au format REST et est disponible sur le port 8080. 
-...
+L'API du serveur est au format REST et est disponible sur le port 7777. 
 
 Les informations sur les points d'entrés de l'API sont trouvable dans les documents suivants : 
 - [Utilisateur (`/users`)](./api/users.md) 
