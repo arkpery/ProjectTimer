@@ -82,23 +82,73 @@ exports.getGroupById = async (req, res) => {
  * @param {Array} res 
  */
 exports.createGroup = async (req, res) => {
+    const decoded = await groupJwt.decode_token(req);
     const body = req.body;
+
+    body.admin = decoded.user.id;
+    if (!body.members) {
+        body.members = [];
+    }
+    const data_members = body.members.slice();
+    body.members = [];
     const group = new Group(body);
-    const decoded = groupJwt.decode_token(req);
-
-    group.admin = decoded.user.id;
     try {
-        const saved = await group.save();
-        const user = await User.findById(decoded.user.id);
-        user.groups.push(saved);
+        const updated = await group.save();
+        const id = updated._id;
+        updated.members = data_members;
+        await updated.save();
+        const members = updated.members;
+        const users = await User.find({
+            groups: [id]
+        });
 
-        await user.save();
-        res.status(201).json({
-            message: translator.translate("GROUP_CREATED", [group.name, user.lastname, user.firstname]),
-            data: {
-                "id": saved._id,
-                "name": saved.name
+
+        for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            let flag = true;
+
+            for (let member of members) {
+                if (user._id.toString() == member.toString()) {
+                    flag = false;
+                }
             }
+            if (user._id.toString() == updated.admin.toString()) {
+                console.log("enter");
+            } else if (flag) {
+                let f2 = true;
+
+                while (f2) {
+                    const index = user.groups.findIndex(el => el.toString() == id.toString());
+
+                    if (index > -1) {
+                        user.groups.splice(index, 1);
+                    } else {
+                        f2 = false;
+                    }
+                }
+                await user.save();
+            }
+        }
+        for (let member of members) {
+            const user = await User.findById(member);
+            let flag = true;
+
+            for (let group of user.groups) {
+                if (group.toString() == id.toString()) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                user.groups.push(id);
+                await user.save();
+            }
+        }
+        res.status(201).json({
+            data:{
+                id: id,
+            },
+            message: translator.translate("GROUP_UPDATED", updated.name),
+            group
         });
     } catch (e) {
         res.status(400).json({
@@ -159,13 +209,14 @@ exports.updateGroupById = async (req, res) => {
     if (!body.members) {
         body.members = [];
     }
-    const data_members = body.members.slice();
-    body.members = [];
+  // const data_members = body.members.slice();
+    //body.members = [];
     const group = new Group(body);
 
+  //  console.log(data_members);
     try {
         const updated = await Group.findByIdAndUpdate(id, group);
-        updated.members = data_members;
+//        updated.members = data_members;
         await updated.save();
         const members = updated.members;
         const users = await User.find({

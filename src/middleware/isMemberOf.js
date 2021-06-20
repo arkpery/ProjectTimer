@@ -59,6 +59,8 @@ exports.isMemberOf = (type) => {
                     const user = await User.findById(id);
                     const project = await Project.findById(projectId);
     
+                    console.log(project);
+                    console.log(user);
                     if (project === null) {
                         throw new AppError(translator.translate("PROJECT_EMPTY"), 404);
                     }
