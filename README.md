@@ -39,8 +39,6 @@ Voici les principales technologies et framework utilisé dans le projet :
 
 Les informations sur le fonctionnement et l'utilisation de l'API du serveur sont trouvable dans le [dossier /doc](./doc) du projet.
 
-De plus quelques informations pour la configuration et la gestion du projet pour les développeurs sont trouvable dans le fichier [/doc/dev.md](./doc/dev.md).
-
 ## Partie Frontend du projet
 
 Voici le lien vers la partie Frontend de notre projet :
