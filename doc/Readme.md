@@ -40,8 +40,5 @@ Voici la liste des erreurs et leurs codes pouvant être retournées par l'applic
 
 ## Base de données
 
-La base de données utilise ... (A définir une BD) dans un docker. 
+La base de données utilise est mongodb dans un docker. 
 
-## Configuration et gestion du projet
-
-Pour les développeurs des informations sur la configuration et la gestion du projet sont trouvable dans le [document dev.md](./dev.md)
